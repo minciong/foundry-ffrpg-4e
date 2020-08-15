@@ -1,0 +1,29 @@
+{
+  "name": "ffrpg4e",
+  "title": "Final Fantasy RPG 4e",
+  "description": "The Final Fantasy RPG 4e system for FoundryVTT!",
+  "version": "1.0.0",
+  "minimumCoreVersion": "0.5.5",
+  "compatibleCoreVersion": "0.5.5",
+  "templateVersion": 2,
+  "author": "Max I",
+  "esmodules": ["module/ffrpg4e.js"],
+  "styles": ["css/ffrpg4e.css"],
+  "scripts": [],
+  "packs": [],
+  "languages": [
+    {
+      "lang": "en",
+      "name": "English",
+      "path": "lang/en.json"
+    }
+  ],
+  "gridDistance": 5,
+  "gridUnits": "ft",
+  "primaryTokenAttribute": "health",
+  "secondaryTokenAttribute": "power",
+  "url": "",
+  "manifest": "",
+  "download": "",
+  "license": "LICENSE.txt"
+}
