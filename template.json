@@ -19,29 +19,130 @@
       "templates": ["base"],
       "biography": "",
       "attributes": {
+        "player":"",
+        "character":"",
+        "hp":0,
+        "mp":0,
         "level": {
-          "value": 1
+          "value": 0
+        },
+        "exp": {
+          "value":200
+        },
+        "job":{
+          "main": 0,
+          "secondary": 0
         }
       },
       "abilities": {
-        "str": {
-          "value": 10
+        "earth": {
+          "exp": 0,
+          "level": 0,
+          "value": 0
         },
-        "dex": {
-          "value": 10
+        "air": {
+          "exp": 0,
+          "level": 0,
+          "value": 0
         },
-        "con": {
-          "value": 10
+        "fire": {
+          "exp": 0,
+          "level": 0,
+          "value": 0
         },
-        "int": {
-          "value": 10
-        },
-        "wis": {
-          "value": 10
-        },
-        "cha": {
-          "value": 10
+        "water": {
+          "exp": 0,
+          "level": 0,
+          "value": 0
         }
+      },
+      "skills":{
+          "strength":{
+            "value": 0,
+            "ability": "earth"
+          }, 
+          "climbing":{
+            "value": 0,
+            "ability": "earth"
+          }, 
+          "swimming":{
+            "value": 0,
+            "ability": "earth"
+          }, 
+          "intimidation":{
+            "value": 0,
+            "ability": "earth"
+          }, 
+          "tolerance":{
+            "value": 0,
+            "ability": "earth"
+          }, 
+          "jumping":{
+            "value": 0,
+            "ability": "earth"
+          },
+          "running":{
+            "value": 0,
+            "ability": "air"
+          },
+          "stealth":{
+            "value": 0,
+            "ability": "air"
+          },
+          "piloting":{
+            "value": 0,
+            "ability": "air"
+          },
+          "riding":{
+            "value": 0,
+            "ability": "air"
+          },
+          "thievery":{
+            "value": 0,
+            "ability": "air"
+          },
+          "acrobatics":{
+            "value": 0,
+            "ability": "air"
+          },
+          "infiltration":{
+            "value": 0,
+            "ability": "fire"
+          },"perception":{
+            "value": 0,
+            "ability": "fire"
+          },"medicine":{
+            "value": 0,
+            "ability": "fire"
+          },"survival":{
+            "value": 0,
+            "ability": "fire"
+          },"technologgy":{
+            "value": 0,
+            "ability": "fire"
+          },"wisdom":{
+            "value": 0,
+            "ability": "fire"
+          },
+          "willpower":{
+            "value": 0,
+            "ability": "water"
+          },"bluff":{
+            "value": 0,
+            "ability": "water"
+          },"animal handling":{
+            "value": 0,
+            "ability": "water"
+          },"charisma":{
+            "value": 0,
+            "ability": "water"
+          },"performance":{
+            "value": 0,
+            "ability": "water"
+          },"magic":{
+            "value": 0,
+            "ability": "water"
+          }
       }
     }
   },
