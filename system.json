@@ -22,8 +22,8 @@
   "gridUnits": "ft",
   "primaryTokenAttribute": "health",
   "secondaryTokenAttribute": "power",
-  "url": "",
-  "manifest": "",
+  "url": "https://github.com/minciong/foundry-ffrpg-4e",
+  "manifest": "https://raw.githubusercontent.com/minciong/foundry-ffrpg-4e/master/system.json",
   "download": "",
   "license": "LICENSE.txt"
 }
