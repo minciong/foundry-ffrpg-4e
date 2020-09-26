@@ -8,7 +8,7 @@
           "min": 0,
           "max": 10
         },
-        "power": {
+        "mana": {
           "value": 5,
           "min": 0,
           "max": 5
@@ -147,11 +147,26 @@
     }
   },
   "Item": {
-    "types": ["item"],
+    "types": [
+      "weapon", 
+      "item"
+    ],
     "templates": {
       "base": {
         "description": ""
       }
+    },
+    "weapon":{
+      "attackWith": "Unarmed",
+      "DamageBase": 0,
+      "DamageType" : "Crush",
+      "isMagical" : false,
+      "userStat": "Earth",
+      "targetStat": "Earth",
+      "ActionModifier": 1.0,
+      "DC": 0,
+
+
     },
     "item": {
       "templates": ["base"],
