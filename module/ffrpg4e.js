@@ -3,7 +3,7 @@ import { FFRPGActor } from "./actor/actor.js";
 import { FFRPGActorSheet } from "./actor/actor-sheet.js";
 import { FFRPGItem } from "./item/item.js";
 import { FFRPGItemSheet } from "./item/item-sheet.js";
-
+// import {ffrpg4e} from "./module/config.js"
 Hooks.once('init', async function() {
 
   game.ffrpg4e = {
@@ -23,7 +23,7 @@ Hooks.once('init', async function() {
   // Define custom Entity classes
   CONFIG.Actor.entityClass = FFRPGActor;
   CONFIG.Item.entityClass = FFRPGItem;
-
+  // CONFIG.ffrpg4e = ffrpg4e;
   // Register sheet application classes
   Actors.unregisterSheet("core", ActorSheet);
   Actors.registerSheet("ffrpg4e", FFRPGActorSheet, { makeDefault: true });

@@ -157,17 +157,15 @@
       }
     },
     "weapon":{
-      "attackWith": "Unarmed",
+      "templates": ["base"],
       "DamageBase": 0,
       "DamageType" : "Crush",
       "isMagical" : false,
       "userStat": "Earth",
       "targetStat": "Earth",
       "ActionModifier": 1.0,
-      "DC": 0,
-
-
-    },
+      "DC": 0
+     },
     "item": {
       "templates": ["base"],
       "quantity": 1,

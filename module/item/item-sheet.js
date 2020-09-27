@@ -30,6 +30,7 @@ export class FFRPGItemSheet extends ItemSheet {
   /** @override */
   getData() {
     const data = super.getData();
+    // data.config = CONFIG.ffrpg4e;
     return data;
   }
 

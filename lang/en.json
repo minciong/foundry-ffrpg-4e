@@ -1,0 +1,19 @@
+{
+	"ffrpg4e":{
+		"stats":{
+			"earth":"Earth",
+			"air":"Air",
+			"fire":"Fire",
+			"water":"Water"
+		},
+		"weapon":{
+			"DamageBase": "Damage Base",
+		    "DamageType" : "Damage Type",
+		    "isMagical" : "Physical/Magical",
+		    "userStat": "User Stat",
+		    "targetStat": "Target Stat",
+		    "ActionModifier": "Action Modifier",
+	    	"DC": "Difficulty Class"
+		}
+	}
+}
