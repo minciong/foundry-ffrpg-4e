@@ -158,13 +158,13 @@
     },
     "weapon":{
       "templates": ["base"],
-      "DamageBase": 0,
-      "DamageType" : "Crush",
-      "isMagical" : false,
+      "damageBase": 0,
+      "element" : "Crush",
+      "damageType" : "Physical",
       "userStat": "Earth",
       "targetStat": "Earth",
-      "ActionModifier": 1.0,
-      "DC": 0
+      "actionModifier": 1.0,
+      "difficulty": 0
      },
     "item": {
       "templates": ["base"],

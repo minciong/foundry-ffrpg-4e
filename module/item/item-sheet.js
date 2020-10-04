@@ -8,7 +8,7 @@ export class FFRPGItemSheet extends ItemSheet {
   static get defaultOptions() {
     return mergeObject(super.defaultOptions, {
       classes: ["ffrpg4e", "sheet", "item"],
-      width: 520,
+      // width: 520,
       height: 480,
       tabs: [{ navSelector: ".sheet-tabs", contentSelector: ".sheet-body", initial: "description" }]
     });
@@ -18,7 +18,7 @@ export class FFRPGItemSheet extends ItemSheet {
   get template() {
     const path = "systems/ffrpg4e/templates/item";
     // Return a single sheet for all item types.
-    return `${path}/item-sheet.html`;
+    return `${path}/${this.item.data.type}-sheet.html`;
     // Alternatively, you could use the following return statement to do a
     // unique item sheet by type, like `weapon-sheet.html`.
 
@@ -30,7 +30,8 @@ export class FFRPGItemSheet extends ItemSheet {
   /** @override */
   getData() {
     const data = super.getData();
-    // data.config = CONFIG.ffrpg4e;
+    data.config = CONFIG.ffrpg4e;
+    console.log(data)
     return data;
   }
 

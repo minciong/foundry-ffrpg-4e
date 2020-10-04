@@ -6,14 +6,32 @@
 			"fire":"Fire",
 			"water":"Water"
 		},
+		"element":{
+			"crush":"Crush",
+			"puncture":"Puncture",
+			"cut":"Cut",
+			"fire":"Fire",
+			"ice":"Ice",
+			"lightning":"Lightning",
+			"air":"Air",
+			"earth":"Earth",
+			"water":"Water",
+			"bio":"Bio",
+			"light":"Light",
+			"shadow":"Shadow"
+		},
+		"damage":{
+			"physical": "Physical",
+			"magical": "Magical"
+		},
 		"weapon":{
-			"DamageBase": "Damage Base",
-		    "DamageType" : "Damage Type",
-		    "isMagical" : "Physical/Magical",
+			"damageBase": "Damage Base",
+		    "element" : "Element",
+		    "damageType" : "Physical/Magical",
 		    "userStat": "User Stat",
 		    "targetStat": "Target Stat",
-		    "ActionModifier": "Action Modifier",
-	    	"DC": "Difficulty Class"
+		    "actionModifier": "Action Modifier",
+	    	"difficulty": "DC"
 		}
 	}
 }
