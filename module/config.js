@@ -18,7 +18,7 @@ ffrpg4e.elementTypes = {
 	earth:"ffrpg4e.element.earth",
 	water:"ffrpg4e.element.water",
 	bio:"ffrpg4e.element.bio",
-	light:"ffrpg44.element.light",
+	light:"ffrpg4e.element.light",
 	shadow:"ffrpg4e.element.shadow"
 
 }
