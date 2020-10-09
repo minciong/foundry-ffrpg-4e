@@ -26,12 +26,32 @@ export class FFRPGActor extends Actor {
     const data = actorData.data;
 
     // Make modifications to data here. For example:
-
+    let expCount = 0;
+    let levelCount = 0;
     // Loop through ability scores, and add their modifiers to our sheet output.
     for (let [key, ability] of Object.entries(data.abilities)) {
       // Calculate the modifier using d20 rules.
-      ability.mod = Math.floor((ability.value - 10) / 2);
+      if(data.expVal){
+            ability.value = Math.floor(ability.level*10 + (ability.exp-(ability.level**2)*10)/(ability.level*2+1));
+            ability.level = Math.floor(Math.sqrt(ability.exp/10))
+            levelCount += ability.level;
+            expCount+=ability.exp;
+          }
+      else{
+            ability.level = Math.floor(ability.value/10);
+            ability.exp = 10*(ability.level**2)+(ability.value%10 * (2*ability.level+1));
+            levelCount += ability.level;
+            expCount+=ability.exp;
+          }
+      ability.nextLevel = (1+2*ability.level)*(10-ability.value%10)
+      ability.nextValue = (1+2*ability.level)-(ability.exp-(ability.level**2)*10)%(1+2*ability.level);
+      data.attributes.level.value=levelCount;
+      data.attributes.exp.spent = expCount;
+      // ability.nextValue = 1+2*ability.level;
+
     }
+    console.log(data.attributes.exp)
+    console.log(expCount)
   }
 
 }

@@ -51,7 +51,7 @@
                         <select name = "data.element">
                             {{#select data.element}}
                             {{#each config.elementTypes as |name type|}}
-                            <option value="{{type}}">{{name}}</option>
+                            <option value="{{type}}">{{localize name}}</option>
                             {{/each}}
                             {{/select}}
                         </select>
@@ -60,7 +60,7 @@
                         <select name = "data.damageType">
                             {{#select data.damageType}}
                             {{#each config.damageTypes as |name type|}}
-                            <option value = "{{type}}">{{name}}</option>
+                            <option value = "{{type}}">{{localize name}}</option>
                             {{/each}}
                             {{/select}}
                         </select>
@@ -69,7 +69,7 @@
                         <select name = "data.userStat">
                             {{#select data.userStat}}
                             {{#each config.statTypes as |name type|}}
-                            <option value = "{{type}}">{{name}}</option>
+                            <option value = "{{type}}">{{localize name}}</option>
                             {{/each}}
                             {{/select}}
                         </select>
@@ -78,7 +78,7 @@
                         <select name = "data.targetStat">
                             {{#select data.targetStat}}
                             {{#each config.statTypes as |name type|}}
-                            <option value = "{{type}}"> {{name}} </option>
+                            <option value = "{{type}}"> {{localize name}} </option>
                             {{/each}}
                             {{/select}}
                         </select>

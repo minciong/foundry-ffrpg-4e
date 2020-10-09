@@ -20,9 +20,12 @@ export class FFRPGActorSheet extends ActorSheet {
   /** @override */
   getData() {
     const data = super.getData();
+    // data.config = CONFIG.ffrpg4e;
     data.dtypes = ["String", "Number", "Boolean"];
+
     for (let attr of Object.values(data.data.attributes)) {
-      attr.isCheckbox = attr.dtype === "Boolean";
+      // console.log("attr",attr);
+      // attr.isCheckbox = attr.dtype === "Boolean";
     }
     return data;
   }

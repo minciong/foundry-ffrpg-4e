@@ -121,8 +121,8 @@
 
 .ffrpg4e .sheet-header {
   -webkit-box-flex: 0;
-  -ms-flex: 0 0 210px;
-  flex: 0 0 210px;
+  -ms-flex: 0 0 400px;
+  flex: 0 0 400px;
   overflow: hidden;
   display: -webkit-box;
   display: -ms-flexbox;

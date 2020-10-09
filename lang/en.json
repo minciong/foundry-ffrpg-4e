@@ -32,6 +32,35 @@
 		    "targetStat": "Target Stat",
 		    "actionModifier": "Action Modifier",
 	    	"difficulty": "DC"
+		},
+		"skill":{
+			"strength": "Strength",
+			"climbing":"Climbing",
+			"swimming":"Swimming",
+			"intimidation":"Intimidation",
+			"tolerance":"Tolerance",
+			"jumping":"Jumping",
+			"fencing":"Fencing",
+			"running":"Running",
+			"stealth":"Stealth",
+			"piloting":"Piloting",
+			"riding":"Riding",
+			"thievery":"Thievery",
+			"acrobatics":"Acrobatic",
+			"marksmanship":"Marksmanship",
+			"infiltration":"Infiltration",
+			"perception":"Perception",
+			"medicine":"Medicine",
+			"survival":"Survival",
+			"technology":"Technology",
+			"wisdom":"Wisdom",
+			"spellcraft":"Spellcraft",
+			"willpower":"Willpower",
+			"bluff":"Bluff",
+			"animalHandling":"Animal Handling",
+			"charisma":"Charisma",
+			"performance":"Performance",
+			"magicSpellResistance":"Magic Spell Resistance"
 		}
 	}
 }
