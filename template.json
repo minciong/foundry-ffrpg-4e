@@ -40,22 +40,30 @@
         "earth": {
           "exp": 0,
           "level": 0,
-          "value": 0
+          "value": 0,
+          "nextLevel":0,
+          "nextValue":0
         },
         "air": {
           "exp": 0,
           "level": 0,
-          "value": 0
+          "value": 0,
+          "nextLevel":0,
+          "nextValue":0
         },
         "fire": {
           "exp": 0,
           "level": 0,
-          "value": 0
+          "value": 0,
+          "nextLevel":0,
+          "nextValue":0
         },
         "water": {
           "exp": 0,
           "level": 0,
-          "value": 0
+          "value": 0,
+          "nextLevel":0,
+          "nextValue":0
         }
       },
       "skills":{
