@@ -47,11 +47,13 @@ export class FFRPGActor extends Actor {
       ability.nextValue = (1+2*ability.level)-(ability.exp-(ability.level**2)*10)%(1+2*ability.level);
       data.attributes.level.value=levelCount;
       data.attributes.exp.spent = expCount;
-      // ability.nextValue = 1+2*ability.level;
 
     }
-    // console.log(data.expVal)
-    // console.log(expCount)
+    console.log(data.attributes.level.value)
+    console.log(data.attributes.job);
+    console.log(data.abilities.earth.value)
+    data.health.max = data.attributes.level.value * data.attributes.job.hpMult + data.abilities.earth.value;
+    data.mana.max = data.attributes.level.value * data.attributes.job.mpMult + data.abilities.water.value
   }
 
 }

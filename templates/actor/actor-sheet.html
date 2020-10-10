@@ -32,20 +32,7 @@
           {{!-- The grid classes are defined in scss/global/_grid.scss. To use,
           use both the "grid" and "grid-Ncol" class where "N" can be any number
           from 1 to 12 and will create that number of columns.  --}}
-          <input name = "data.expVal" type = "checkbox" {{checked data.expVal}}><label for="data.expVal">Calculate Using Exp</label><br>
-          <span>{{data.attributes.exp.spent}}/{{data.attributes.exp.value}}</span>
-          <span>Level: {{data.attributes.level.value}}</span>
-          <div class="abilities grid grid-2col">
-            {{#each data.abilities as |ability key|}}
-              <div class="ability flexrow flex-group-center">
-                <label for="data.abilities.{{key}}.exp" class="resource-label">{{key}} EXP</label>
-                <input type="text" name="data.abilities.{{key}}.exp" value="{{ability.exp}}" data-dtype="Number"/>
-                <label for="data.abilities.{{key}}.value" class="resource-label">{{key}} POINTS</label>
-                <input type="text" name="data.abilities.{{key}}.value" value="{{ability.value}}" data-dtype="Number"/>
-                <span class="ability-mod rollable" data-roll="d100+@abilities.{{key}}.value" data-label="{{key}}">TotalXP{{numberFormat ability.exp decimals=0}}<br>Value{{numberFormat ability.value decimals=0}}<br> Level{{numberFormat ability.level decimals=0}}<br>next point{{numberFormat ability.nextValue decimals=0}}<br> next level{{numberFormat ability.nextLevel decimals=0}}</span>
-              </div>
-            {{/each}}
-          </div>
+          
         </div>
     </header>
 
@@ -61,6 +48,20 @@
 
         {{!-- Biography Tab --}}
         <div class="tab biography" data-group="primary" data-tab="description">
+            <input name = "data.expVal" type = "checkbox" {{checked data.expVal}}><label for="data.expVal">Calculate Using Exp</label><br>
+          <span>{{data.attributes.exp.spent}}/{{data.attributes.exp.value}}</span>
+          <span>Level: {{data.attributes.level.value}}</span>
+          <div class="abilities grid grid-2col">
+            {{#each data.abilities as |ability key|}}
+              <div class="ability flexrow flex-group-center">
+                <label for="data.abilities.{{key}}.exp" class="resource-label">{{key}} EXP</label>
+                <input type="text" name="data.abilities.{{key}}.exp" value="{{ability.exp}}" data-dtype="Number"/>
+                <label for="data.abilities.{{key}}.value" class="resource-label">{{key}} POINTS</label>
+                <input type="text" name="data.abilities.{{key}}.value" value="{{ability.value}}" data-dtype="Number"/>
+                <span class="ability-mod rollable" data-roll="d100+@abilities.{{key}}.value" data-label="{{key}}">TotalXP{{numberFormat ability.exp decimals=0}}<br>Value{{numberFormat ability.value decimals=0}}<br> Level{{numberFormat ability.level decimals=0}}<br>next point{{numberFormat ability.nextValue decimals=0}}<br> next level{{numberFormat ability.nextLevel decimals=0}}</span>
+              </div>
+            {{/each}}
+          </div>
             {{editor content=data.biography target="data.biography" button=true owner=owner editable=editable}}
         </div>
         <div class="tab skills grid grid-2col" data-group="primary" data-tab="skills">

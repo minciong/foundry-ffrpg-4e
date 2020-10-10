@@ -32,6 +32,8 @@
         "job":{
           "main": "",
           "secondary": "",
+          "armor":[],
+          "weapons":[],
           "hpMult":1,
           "mpMult":1
         }
