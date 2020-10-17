@@ -12,7 +12,8 @@
           "value": 5,
           "min": 0,
           "max": 5
-        }
+        },
+        "initDice":3
       }
     },
     "character": {

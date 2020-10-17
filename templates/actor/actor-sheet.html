@@ -28,6 +28,14 @@
                     <input type="text" name="data.mana.max" value="{{data.mana.max}}" data-dtype="Number"/>
                   </div>
               </div>
+              <div class="resource flex-group-center">
+                  <label for="data.initDice" class="resource-label">Initiative</label>
+                  <div class="resource-content flexrow flex-center flex-between">
+                    <input type="text" name="data.initDice" value="{{data.initDice}}" data-dtype="Number"/>
+
+                  </div>
+              </div>
+              
           </div>
           {{!-- The grid classes are defined in scss/global/_grid.scss. To use,
           use both the "grid" and "grid-Ncol" class where "N" can be any number
@@ -38,18 +46,20 @@
 
     {{!-- Sheet Tab Navigation --}}
     <nav class="sheet-tabs tabs" data-group="primary">
-        <a class="item" data-tab="description">Description</a>
+        <a class="item" data-tab="stats">Stats</a>
+        <a class="item" data-tab="class">Class</a>
         <a class="item" data-tab="skills">Skills</a>
         <a class="item" data-tab="items">Items</a>
+        <a class="item" data-tab="description">Description</a>
     </nav>
 
     {{!-- Sheet Body --}}
     <section class="sheet-body">
 
         {{!-- Biography Tab --}}
-        <div class="tab biography" data-group="primary" data-tab="description">
-            <input name = "data.expVal" type = "checkbox" {{checked data.expVal}}><label for="data.expVal">Calculate Using Exp</label><br>
-          <span>{{data.attributes.exp.spent}}/{{data.attributes.exp.value}}</span>
+        <div class="tab biography" data-group="primary" data-tab="stats">
+          <input name = "data.expVal" type = "checkbox" {{checked data.expVal}}><label for="data.expVal">Calculate Using Exp</label><br>
+          <span>{{data.attributes.exp.spent}}/{{data.attributes.exp.total}}</span>
           <span>Level: {{data.attributes.level.value}}</span>
           <div class="abilities grid grid-2col">
             {{#each data.abilities as |ability key|}}
@@ -62,21 +72,33 @@
               </div>
             {{/each}}
           </div>
-            {{editor content=data.biography target="data.biography" button=true owner=owner editable=editable}}
         </div>
-        <div class="tab skills grid grid-2col" data-group="primary" data-tab="skills">
-            Test
-            {{#each data.skills as |skill key|}}
-            <div class = "flexrow flex-group-center">
-              <label for="data.skills.{{key}}.value" class="resource-label">{{key}}</label>
-              <input type="text" name="data.skills.{{key}}.value" value="{{skill.value}}" data-dtype="Number"/>
-              <span class="ability-mod rollable" data-roll="{{skill.value}}d100kh1+@abilities.{{skill.ability}}.value" data-label="{{key}}">{{key}}, {{skill.value}}, 
-                {{skill.ability}}
-              </span>
+        <div class="tab biography" data-group="primary" data-tab="class">
+          <div class="resources grid grid-2col">
+              <div class="resource flex-group-center">
+                  <label for="data.attributes.job.main" class="resource-label">Main Job</label>
+                  <div class="resource-content flexrow flex-center flex-between">
+                    <input type="text" name="data.attributes.job.main" value="{{data.attributes.job.main}}"/>
+                  </div>
+                  <label for="data.attributes.job.secondary" class="resource-label">Secondary Job</label>
+                  <div class="resource-content flexrow flex-center flex-between">
+                    <input type="text" name="data.attributes.job.secondary" value="{{data.attributes.job.secondary}}"/>
+                  </div>
+              </div>
+              <div class="resource flex-group-center">
+                  <label for="data.attributes.job.hpMult" class="resource-label">HP Multiplier</label>
+                  <div class="resource-content flexrow flex-center flex-between">
+                    <input type="text" name="data.attributes.job.hpMult" value="{{data.attributes.job.hpMult}}" data-dtype="Number"/>
+                  </div>
+                  <label for="data.attributes.job.mpMult" class="resource-label">Secondary Job</label>
+                  <div class="resource-content flexrow flex-center flex-between">
+                    <input type="text" name="data.attributes.job.mpMult" value="{{data.attributes.job.mpMult}}" data-dtype="Number"/>
+                  </div>
+              </div>
               
-            </div>
-            {{/each}}
+          </div>
         </div>
+
         {{!-- Owned Items Tab --}}
         <div class="tab items" data-group="primary" data-tab="items">
             <ol class="items-list">
@@ -100,6 +122,22 @@
             </ol>
         </div>
 
+        <div class="tab biography" data-group="primary" data-tab="description">
+          {{editor content=data.biography target="data.biography" button=true owner=owner editable=editable}}
+        </div>
+        <div class="tab skills grid grid-2col" data-group="primary" data-tab="skills">
+            Test
+            {{#each data.skills as |skill key|}}
+            <div class = "flexrow flex-group-center flex-between">
+              <label for="data.skills.{{key}}.value" class="resource-label">{{key}}</label>
+              <input type="text" name="data.skills.{{key}}.value" value="{{skill.value}}" data-dtype="Number"/>
+              <span class="ability-mod rollable" data-roll="{{skill.value}}d100kh1+@abilities.{{skill.ability}}.value" data-label="{{key}}">
+                {{skill.ability}}
+              </span>
+              
+            </div>
+            {{/each}}
+        </div>
     </section>
 </form>
 

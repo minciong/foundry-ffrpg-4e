@@ -49,9 +49,7 @@ export class FFRPGActor extends Actor {
       data.attributes.exp.spent = expCount;
 
     }
-    console.log(data.attributes.level.value)
-    console.log(data.attributes.job);
-    console.log(data.abilities.earth.value)
+    
     data.health.max = data.attributes.level.value * data.attributes.job.hpMult + data.abilities.earth.value;
     data.mana.max = data.attributes.level.value * data.attributes.job.mpMult + data.abilities.water.value
   }
