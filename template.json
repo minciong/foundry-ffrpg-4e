@@ -128,7 +128,8 @@
     "types": [
       "armor",
       "weapon", 
-      "item"
+      "item",
+      "action"
     ],
     "templates": {
       "base": {

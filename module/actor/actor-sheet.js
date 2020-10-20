@@ -31,6 +31,7 @@ export class FFRPGActorSheet extends ActorSheet {
     data.armor.sort((a, b) => (a.sort || 0) - (b.sort || 0));
     data.actions = data.actor.items.filter(i=>i.type=="action");
     data.actions.sort((a, b) => (a.sort || 0) - (b.sort || 0));
+    console.log(data)
     return data;
   }
 

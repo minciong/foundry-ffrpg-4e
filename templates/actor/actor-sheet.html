@@ -75,14 +75,15 @@
           <input name = "data.expVal" type = "checkbox" {{checked data.expVal}}><label for="data.expVal">Calculate Using Exp</label><br>
           <span>{{data.attributes.exp.spent}}/{{data.attributes.exp.total}}</span>
           <span>Level: {{data.attributes.level.value}}</span>
-          <div class="abilities grid grid-2col">
+          <div class="abilities grid grid-4col">
             {{#each data.abilities as |ability key|}}
               <div class="ability flexcol flex-group-center">
-                <label for="data.abilities.{{key}}.exp" class="resource-label">{{key}} EXP</label>
+                <label><span class="resource-label ability-mod rollable" data-roll="d100+@abilities.{{key}}.value" data-label="{{key}}">{{key}}</span>: Level {{numberFormat ability.level decimals=0}}</label>
+                <label for="data.abilities.{{key}}.exp" class="resource-label">EXP</label>
                 <input type="text" name="data.abilities.{{key}}.exp" value="{{ability.exp}}" data-dtype="Number" min ="0"/>
-                <label for="data.abilities.{{key}}.value" class="resource-label">{{key}} POINTS</label>
+                <label for="data.abilities.{{key}}.value" class="resource-label">POINTS</label>
                 <input type="text" name="data.abilities.{{key}}.value" value="{{ability.value}}" data-dtype="Number" min ="0"/>
-                <span class="ability-mod rollable" data-roll="d100+@abilities.{{key}}.value" data-label="{{key}}">TotalXP{{numberFormat ability.exp decimals=0}}<br>Value{{numberFormat ability.value decimals=0}}<br> Level{{numberFormat ability.level decimals=0}}<br>next point{{numberFormat ability.nextValue decimals=0}}<br> next level{{numberFormat ability.nextLevel decimals=0}}</span>
+                <h3 class="">XP to Next Point: {{numberFormat ability.nextValue decimals=0}}<br> XP to Next Level: {{numberFormat ability.nextLevel decimals=0}}</h3>
               </div>
             {{/each}}
           </div>
@@ -115,15 +116,15 @@
                   <div class="item-image"></div>
                   <div class="item-name">Name</div>
                   <div class="item-controls">
-                    <a class="item-control item-create" title="Create item" data-type="item"><i class="fas fa-plus"></i> Add item</a>
+                    <a class="item-control item-create" title="Create item" data-type="action"><i class="fas fa-plus"></i> Add item</a>
                   </div>
                   
                 </li>
-            {{#each items as |item id|}}
+            {{#each actions as |action id|}}
             
-                <li class="item flexrow" data-item-id="{{item._id}}">
-                    <div class="item-image"><img src="{{item.img}}" title="{{item.name}}" width="24" height="24"/></div>
-                    <h4 class="item-name">{{item.name}}</h4>
+                <li class="item flexrow" data-item-id="{{action._id}}">
+                    <div class="item-image"><img src="{{action.img}}" title="{{action.name}}" width="24" height="24"/></div>
+                    <h4 class="item-name">{{action.name}}</h4>
                     <div class="item-controls">
                         <a class="item-control item-edit" title="Edit Item"><i class="fas fa-edit"></i></a>
                         <a class="item-control item-delete" title="Delete Item"><i class="fas fa-trash"></i></a>
