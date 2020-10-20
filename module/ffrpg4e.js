@@ -55,4 +55,11 @@ Hooks.once('init', async function() {
   Handlebars.registerHelper('toLowerCase', function(str) {
     return str.toLowerCase();
   });
+  Handlebars.registerHelper('if_eq', function(a, b, opts) {
+    if (a == b) {
+        return opts.fn(this);
+    } else {
+        return opts.inverse(this);
+    }
+});
 });

@@ -13,7 +13,9 @@
           "min": 0,
           "max": 5
         },
-        "initDice":3
+        "initDice":3,
+        "arm":0,
+        "marm":0
       }
     },
     "character": {
@@ -25,6 +27,18 @@
         "character":"",
         "level": {
           "value": 0
+        },
+        "skillPoints":{
+          "budget":0,
+          "earthBudget":0,
+          "airBudget":0,
+          "fireBudget":0,
+          "waterBudget":0,
+          "earthSpent":0,
+          "airSpent":0,
+          "fireSpent":0,
+          "waterSpent":0,
+          "totalSpent":0
         },
         "exp": {
           "spent":0,
@@ -70,114 +84,41 @@
         }
       },
       "skills":{
-      	
-          "strength":{
-            "value": 1,
-            "ability": "earth"
-          }, 
-          "climbing":{
-            "value": 1,
-            "ability": "earth"
-          }, 
-          "swimming":{
-            "value": 1,
-            "ability": "earth"
-          }, 
-          "intimidation":{
-            "value": 1,
-            "ability": "earth"
-          }, 
-          "tolerance":{
-            "value": 1,
-            "ability": "earth"
-          }, 
-          "jumping":{
-            "value": 1,
-            "ability": "earth"
+          "earth":{
+              "strength":1, 
+              "climbing":1, 
+              "swimming":1, 
+              "intimidation":1, 
+              "tolerance":1, 
+              "jumping":1,
+              "fencing":1
+            },
+        "air":{
+            "running":1,
+            "stealth":1,
+            "piloting":1,
+            "riding":1,
+            "thievery":1,
+            "acrobatics":1,
+            "marksmanship":1
           },
-          "fencing":{
-            "value": 1,
-            "ability": "earth"
+        "fire":{
+            "infiltration":1,
+            "perception":1,
+            "medicine":1,
+            "survival":1,
+            "technology":1,
+            "wisdom":1,
+             "spellcraft":1
           },
-          "running":{
-            "value": 1,
-            "ability": "air"
-          },
-          "stealth":{
-            "value": 1,
-            "ability": "air"
-          },
-          "piloting":{
-            "value": 1,
-            "ability": "air"
-          },
-          "riding":{
-            "value": 1,
-            "ability": "air"
-          },
-          "thievery":{
-            "value": 1,
-            "ability": "air"
-          },
-          "acrobatics":{
-            "value": 1,
-            "ability": "air"
-          },
-          "marksmanship":{
-            "value": 1,
-            "ability": "air"
-          },
-          "infiltration":{
-            "value": 1,
-            "ability": "fire"
-          },
-          "perception":{
-            "value": 1,
-            "ability": "fire"
-          },
-          "medicine":{
-            "value": 1,
-            "ability": "fire"
-          },
-          "survival":{
-            "value": 1,
-            "ability": "fire"
-          },
-          "technology":{
-            "value": 1,
-            "ability": "fire"
-          },
-          "wisdom":{
-            "value": 1,
-            "ability": "fire"
-          },
-           "spellcraft":{
-            "value": 1,
-            "ability": "fire"
-          },
-          "willpower":{
-            "value": 1,
-            "ability": "water"
-          },
-          "bluff":{
-            "value": 1,
-            "ability": "water"
-          },
-          "animalHandling":{
-            "value": 1,
-            "ability": "water"
-          },
-          "charisma":{
-            "value": 1,
-            "ability": "water"
-          },
-          "performance":{
-            "value": 1,
-            "ability": "water"
-          },
-          "magicSpellResistance":{
-            "value": 1,
-            "ability": "water"
+          "water":{
+            "willpower":1,
+            "bluff":1,
+            "animalHandling":1,
+            "charisma":1,
+            "performance":1,
+            "magic":1,
+            "spellResistance":1
           }
 
       }
@@ -205,6 +146,19 @@
       "targetStat": "Earth",
       "actionModifier": 1.0,
       "difficulty": 0
+     },
+     "action":{
+      "templates": ["base"],
+      "damageBase": 0,
+      "element" : "Crush",
+      "damageType" : "Physical",
+      "userStat": "Earth",
+      "targetStat": "Earth",
+      "actionModifier": 1.0,
+      "difficulty": 0,
+      "mpCost":0,
+      "actionType":"quick",
+      "actionSpeed":0
      },
      "armor":{
        "type":"light",

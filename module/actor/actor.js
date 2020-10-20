@@ -30,7 +30,7 @@ export class FFRPGActor extends Actor {
     let levelCount = 0;
     // Loop through ability scores, and add their modifiers to our sheet output.
     for (let [key, ability] of Object.entries(data.abilities)) {
-      // Calculate the modifier using d20 rules.
+      // Calculate the modifier using d100 rules.
       if(data.expVal){
             ability.level = Math.floor(Math.sqrt(ability.exp/10))
             ability.value = Math.floor(ability.level*10 + (ability.exp-(ability.level**2)*10)/(ability.level*2+1));
@@ -52,6 +52,28 @@ export class FFRPGActor extends Actor {
     
     data.health.max = data.attributes.level.value * data.attributes.job.hpMult + data.abilities.earth.value;
     data.mana.max = data.attributes.level.value * data.attributes.job.mpMult + data.abilities.water.value
+    let skillBudget = Math.floor(levelCount/3);
+    data.attributes.skillPoints.budget=skillBudget;
+    data.attributes.skillPoints.earthBudget=data.abilities.earth.level;
+    data.attributes.skillPoints.airBudget=data.abilities.air.level;
+    data.attributes.skillPoints.fireBudget=data.abilities.fire.level;
+    data.attributes.skillPoints.waterBudget=data.abilities.water.level;
+    let skillCount = 0;
+    let skillArr=[]
+    let localCount=0;
+    for (let [key, ability] of Object.entries(data.skills)){
+      for (let [skill, value] of Object.entries(ability)){
+        localCount+=(value-1)
+      }
+        skillCount+=localCount
+        skillArr.push(localCount)
+        localCount=0;
+    }
+    data.attributes.skillPoints.earthSpent=skillArr[0];
+    data.attributes.skillPoints.airSpent=skillArr[1];
+    data.attributes.skillPoints.fireSpent=skillArr[2];
+    data.attributes.skillPoints.waterSpent=skillArr[3];
+    data.attributes.skillPoints.totalSpent=skillCount;
   }
 
 }

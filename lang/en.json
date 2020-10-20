@@ -65,7 +65,8 @@
 			"animalHandling":"Animal Handling",
 			"charisma":"Charisma",
 			"performance":"Performance",
-			"magicSpellResistance":"Magic Spell Resistance"
+			"magic":"Magic",
+			"spellResistance":"Magic Spell Resistance"
 		}
 	}
 }

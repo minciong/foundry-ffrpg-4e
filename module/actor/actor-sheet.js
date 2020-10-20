@@ -20,13 +20,17 @@ export class FFRPGActorSheet extends ActorSheet {
   /** @override */
   getData() {
     const data = super.getData();
-    // data.config = CONFIG.ffrpg4e;
+    data.config = CONFIG.ffrpg4e;
     data.dtypes = ["String", "Number", "Boolean"];
 
-    for (let attr of Object.values(data.data.attributes)) {
-      // console.log("attr",attr);
-      // attr.isCheckbox = attr.dtype === "Boolean";
-    }
+    data.items = data.actor.items.filter(i=>i.type=="item");
+    data.items.sort((a, b) => (a.sort || 0) - (b.sort || 0));
+    data.weapons = data.actor.items.filter(i=>i.type=="weapon");
+    data.weapons.sort((a, b) => (a.sort || 0) - (b.sort || 0));
+    data.armor = data.actor.items.filter(i=>i.type=="armor");
+    data.armor.sort((a, b) => (a.sort || 0) - (b.sort || 0));
+    data.actions = data.actor.items.filter(i=>i.type=="action");
+    data.actions.sort((a, b) => (a.sort || 0) - (b.sort || 0));
     return data;
   }
 

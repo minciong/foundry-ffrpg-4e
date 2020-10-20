@@ -53,5 +53,6 @@ ffrpg4e.skillTypes = {
 	  animalHandling:"ffrpg.skill.animalHandling",
 	  charisma:"ffrpg.skill.charisma",
 	  performance:"ffrpg.skill.performance",
-	  magicSpellResistance:"ffrpg.skill.magicSpellResistance",
+	  magic:"ffrpg.skill.magic",
+	  spellResistance:"ffrpg.skill.spellResistance",
 }
