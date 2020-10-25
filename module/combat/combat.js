@@ -19,7 +19,7 @@ export const rollInitiative = async function(ids, formula=null, messageOptions={
       // Roll initiative
       const cf = formula || this._getInitiativeFormula(c);
       const roll = this._getInitiativeRoll(c, cf);
-      const iDice=roll._dice[0].rolls.map(x=>x.roll).sort(function(a, b){return a-b})
+      const iDice=roll.dice[0].results.map(x=>x.result).sort(function(a, b){return a-b})
       updates.push({_id: id, initiative: roll.total,initDice:iDice});
 
       // Determine the roll mode
@@ -120,13 +120,13 @@ class Combat extends Entity {
 
     /**
      * Track the sorted turn order of this combat encounter
-     * @type {Array}
+     * @type {Combatant[]}
      */
-    this.turns;
+    this.turns = this.turns || [];
 
     /**
      * Record the current round, turn, and tokenId to understand changes in the encounter state
-     * @type {Object}
+     * @type {{round: number|null, turn: number|null, tokenId: string|null}}
      * @private
      */
     this.current = {
@@ -137,7 +137,7 @@ class Combat extends Entity {
 
     /**
      * Track the previous round, turn, and tokenId to understand changes in the encounter state
-     * @type {Object}
+     * @type {{round: number|null, turn: number|null, tokenId: string|null}}
      * @private
      */
     this.previous = {
@@ -148,7 +148,7 @@ class Combat extends Entity {
 
     /**
      * Track whether a sound notification is currently being played to avoid double-dipping
-     * @type {Boolean}
+     * @type {boolean}
      * @private
      */
     this._soundPlaying = false;
@@ -157,12 +157,14 @@ class Combat extends Entity {
   /* -------------------------------------------- */
 
   /**
-   * Configure the attributes of the Folder Entity
-   *
-   * @returns {Entity} baseEntity       The parent class which directly inherits from the Entity interface.
-   * @returns {EntityCollection} collection   The EntityCollection class to which Entities of this type belong.
-   * @returns {Array} embeddedEntities  The names of any Embedded Entities within the Entity data structure.
+   * The configuration setting used to record Combat preferences
+   * @type {string}
    */
+  static CONFIG_SETTING = "combatTrackerConfig";
+
+  /* -------------------------------------------- */
+
+  /** @override */
   static get config() {
     return {
       baseEntity: Combat,
@@ -172,14 +174,80 @@ class Combat extends Entity {
     };
   }
 
-	/* -------------------------------------------- */
+  /* -------------------------------------------- */
 
   /**
    * Prepare Embedded Entities which exist within the parent Combat.
    * For example, in the case of an Actor, this method is responsible for preparing the Owned Items the Actor contains.
    */
-	prepareEmbeddedEntities() {
-	  this.turns = this.setupTurns();
+  prepareEmbeddedEntities() {
+    this.turns = this.setupTurns();
+  }
+
+  /* -------------------------------------------- */
+
+  /**
+   * Return the Array of combatants sorted into initiative order, breaking ties alphabetically by name.
+   * @return {Combatant[]}
+   */
+  setupTurns() {
+    const combatants = this.data.combatants;
+    const scene = game.scenes.get(this.data.scene);
+    const players = game.users.players;
+    const settings = game.settings.get("core", Combat.CONFIG_SETTING);
+    const turns = combatants.map(c => this._prepareCombatant(c, scene, players, settings)).sort(this._sortCombatants);
+    this.data.turn = Math.clamped(this.data.turn, 0, turns.length-1);
+    return this.turns = turns;
+  }
+
+  /* -------------------------------------------- */
+
+  /**
+   * Prepare turn data for one specific combatant.
+   * @private
+   */
+  _prepareCombatant(c, scene, players, settings={}) {
+
+    // Populate data about the combatant
+    c.token = scene.getEmbeddedEntity("Token", c.tokenId);
+    c.actor = c.token ? Actor.fromToken(new Token(c.token, scene)) : null;
+    c.name = c.name || c.token?.name || c.actor?.name || game.i18n.localize("COMBAT.UnknownCombatant");
+
+    // Permissions and visibility
+    c.permission = c.actor?.permission ?? 0;
+    c.players = c.actor ? players.filter(u => c.actor.hasPerm(u, "OWNER")) : [];
+    c.owner = game.user.isGM || (c.actor ? c.actor.owner : false);
+    c.resource = c.actor ? getProperty(c.actor.data.data, settings.resource) : null;
+
+    // Combatant thumbnail image
+    c.img = c.img ?? c.token?.img ?? c.actor?.img ?? CONST.DEFAULT_TOKEN;
+    if ( VideoHelper.hasVideoExtension(c.img) ) {
+      game.video.createThumbnail(c.img, {width: 100, height: 100}).then(thumb => c.img = thumb);
+    }
+
+    // Set state information
+    c.initiative = Number.isNumeric(c.initiative) ? Number(c.initiative) : null;
+    c.visible = c.owner || !c.hidden;
+    return c;
+  }
+
+  /* -------------------------------------------- */
+
+  /**
+   * Define how the array of Combatants is sorted in the displayed list of the tracker.
+   * This method can be overridden by a system or module which needs to display combatants in an alternative order.
+   * By default sort by initiative, falling back to name
+   * @private
+   */
+  _sortCombatants(a, b) {
+    const ia = Number.isNumeric(a.initiative) ? a.initiative : -9999;
+    const ib = Number.isNumeric(b.initiative) ? b.initiative : -9999;
+    let ci = ib - ia;
+    if ( ci !== 0 ) return ci;
+    let [an, bn] = [a.token?.name || "", b.token?.name || ""];
+    let cn = an.localeCompare(bn);
+    if ( cn !== 0 ) return cn;
+    return a.tokenId - b.tokenId;
   }
 
   /* -------------------------------------------- */
@@ -188,7 +256,7 @@ class Combat extends Entity {
 
   /**
    * A convenience reference to the Array of combatant data within the Combat entity
-   * @type {Array.<Object>}
+   * @type {object[]}
    */
   get combatants() {
     return this.data.combatants;
@@ -198,7 +266,7 @@ class Combat extends Entity {
 
   /**
    * Get the data object for the Combatant who has the current turn
-   * @type {Object}
+   * @type {Combatant}
    */
   get combatant() {
     return this.turns[this.data.turn];
@@ -238,7 +306,7 @@ class Combat extends Entity {
 
   /**
    * Return the object of settings which modify the Combat Tracker behavior
-   * @return {Object}
+   * @return {object}
    */
   get settings() {
     return this.collection.settings;
@@ -248,7 +316,7 @@ class Combat extends Entity {
 
   /**
    * Has this combat encounter been started?
-   * @type {Boolean}
+   * @type {boolean}
    */
   get started() {
     return ( this.turns.length > 0 ) && ( this.round > 0 );
@@ -261,7 +329,7 @@ class Combat extends Entity {
   /**
    * Set the current Combat encounter as active within the Scene.
    * Deactivate all other Combat encounters within the viewed Scene and set this one as active
-   * @return {Promise.<Combat>}
+   * @return {Promise<Combat>}
    */
   async activate() {
     const scene = game.scenes.viewed;
@@ -276,50 +344,8 @@ class Combat extends Entity {
   /* -------------------------------------------- */
 
   /**
-   * Return the Array of combatants sorted into initiative order, breaking ties alphabetically by name
-   * @return {Array}
-   */
-  setupTurns() {
-    const scene = game.scenes.get(this.data.scene);
-    const players = game.users.players;
-
-    // Populate additional data for each combatant
-    let turns = this.data.combatants.map(c => {
-      c.token = scene.getEmbeddedEntity("Token", c.tokenId);
-      if ( !c.token ) return c;
-      c.actor = Actor.fromToken(new Token(c.token, scene));
-      c.players = c.actor ? players.filter(u => c.actor.hasPerm(u, "OWNER")) : [];
-      c.owner = game.user.isGM || (c.actor ? c.actor.owner : false);
-      c.visible = c.owner || !c.hidden;
-      return c;
-    }).filter(c => c.token);
-
-    // Sort turns into initiative order: (1) initiative, (2) name, (3) tokenId
-    turns = turns.sort((a, b) => {
-      const ia = Number.isNumeric(a.initiative) ? a.initiative : -9999;
-      const ib = Number.isNumeric(b.initiative) ? b.initiative : -9999;
-      let ci = ib - ia;
-      if ( ci !== 0 ) return ci;
-      let [an, bn] = [a.token.name || "", b.token.name || ""];
-      let cn = an.localeCompare(bn);
-      if ( cn !== 0 ) return cn;
-      return a.tokenId - b.tokenId;
-    });
-
-    // Ensure the current turn is bounded
-    this.data.turn = Math.clamped(this.data.turn, 0, turns.length-1);
-    this.turns = turns;
-
-    // When turns change, tracked resources also change
-    if ( ui.combat ) ui.combat.updateTrackedResources();
-    return this.turns;
-  }
-
-  /* -------------------------------------------- */
-
-  /**
    * Begin the combat encounter, advancing to round 1 and turn 1
-   * @return {Promise}
+   * @return {Promise<Combat>}
    */
   async startCombat() {
     return this.update({round: 1, turn: 0});
@@ -329,7 +355,7 @@ class Combat extends Entity {
 
   /**
    * Advance the combat to the next turn
-   * @return {Promise}
+   * @return {Promise<Combat>}
    */
   async nextTurn() {
     let turn = this.turn;
@@ -345,43 +371,39 @@ class Combat extends Entity {
           break;
         }
       }
-    } else next = turn + 1;
+    }
+    else next = turn + 1;
 
     // Maybe advance to the next round
     let round = this.round;
     if ( (this.round === 0) || (next === null) || (next >= this.turns.length) ) {
-      round = round + 1;
-      next = 0;
-      if ( skip ) {
-        next = this.turns.findIndex(t => !t.defeated);
-        if (next === -1) {
-          ui.notifications.warn(game.i18n.localize("COMBAT.NoneRemaining"));
-          next = 0;
-        }
-      }
+      return this.nextRound();
     }
 
     // Update the encounter
-    return this.update({round: round, turn: next});
+    const advanceTime = CONFIG.time.turnTime;
+    this.update({round: round, turn: next}, {advanceTime});
   }
 
   /* -------------------------------------------- */
 
   /**
    * Rewind the combat to the previous turn
-   * @return {Promise}
+   * @return {Promise<Combat>}
    */
   async previousTurn() {
     if ( this.turn === 0 && this.round === 0 ) return Promise.resolve();
     else if ( this.turn === 0 ) return this.previousRound();
-    return this.update({turn: this.turn - 1});
+    const advanceTime = -1 * CONFIG.time.turnTime;
+    return this.update({turn: this.turn - 1}, {advanceTime});
+
   }
 
   /* -------------------------------------------- */
 
   /**
    * Advance the combat to the next round
-   * @return {Promise}
+   * @return {Promise<Combat>}
    */
   async nextRound() {
     let turn = 0;
@@ -392,31 +414,35 @@ class Combat extends Entity {
         turn = 0;
       }
     }
-    return this.update({round: this.round+1, turn: turn});
+    let advanceTime = Math.max(this.turns.length - this.data.turn, 1) * CONFIG.time.turnTime;
+    advanceTime += CONFIG.time.roundTime;
+    return this.update({round: this.round+1, turn: turn}, {advanceTime});
   }
 
   /* -------------------------------------------- */
 
   /**
    * Rewind the combat to the previous round
-   * @return {Promise}
+   * @return {Promise<Combat>}
    */
   async previousRound() {
     let turn = ( this.round === 0 ) ? 0 : this.turns.length - 1;
-    return this.update({round: Math.max(this.round - 1, 0), turn: turn});
+    const round = Math.max(this.round - 1, 0);
+    let advanceTime = -1 * this.data.turn * CONFIG.time.turnTime;
+    if ( round > 0 ) advanceTime -= CONFIG.time.roundTime;
+    return this.update({round, turn}, {advanceTime});
   }
 
   /* -------------------------------------------- */
 
   /**
    * Reset all combatant initiative scores, setting the turn back to zero
-   * @return {Promise}
+   * @return {Promise<Combat>}
    */
   async resetAll() {
     const updates = this.data.combatants.map(c => { return {
       _id: c._id,
-      initiative: null,
-      initDice:[]
+      initiative: null
     }});
     await this.updateEmbeddedEntity("Combatant", updates);
     return this.update({turn: 0});
@@ -426,7 +452,7 @@ class Combat extends Entity {
 
   /**
    * Display a dialog querying the GM whether they wish to end the combat encounter and empty the tracker
-   * @return {Promise}
+   * @return {Promise<void>}
    */
   async endCombat() {
     return Dialog.confirm({
@@ -440,7 +466,7 @@ class Combat extends Entity {
   /*  Combatant Management Methods                */
   /* -------------------------------------------- */
 
-  /** @extends {Entity.getEmbeddedEntity} */
+  /** @override */
   getCombatant(id) {
     return this.getEmbeddedEntity("Combatant", id);
   }
@@ -449,7 +475,7 @@ class Combat extends Entity {
 
   /**
    * Get a Combatant using its Token id
-   * {string} tokenId   The id of the Token for which to acquire the combatant
+   * @param {string} tokenId   The id of the Token for which to acquire the combatant
    */
   getCombatantByToken(tokenId) {
     return this.turns.find(c => c.tokenId === tokenId);
@@ -461,7 +487,7 @@ class Combat extends Entity {
    * Set initiative for a single Combatant within the Combat encounter.
    * Turns will be updated to keep the same combatant as current in the turn order
    * @param {string} id         The combatant ID for which to set initiative
-   * @param {Number} value      A specific initiative value to set
+   * @param {number} value      A specific initiative value to set
    */
   async setInitiative(id, value) {
     const currentId = this.combatant._id;
@@ -473,12 +499,14 @@ class Combat extends Entity {
 
   /**
    * Roll initiative for one or multiple Combatants within the Combat entity
-   * @param {Array|string} ids        A Combatant id or Array of ids for which to roll
-   * @param {string|null} formula     A non-default initiative formula to roll. Otherwise the system default is used.
-   * @param {Object} messageOptions   Additional options with which to customize created Chat Messages
-   * @return {Promise.<Combat>}       A promise which resolves to the updated Combat entity once updates are complete.
+   * @param {string|string[]} ids     A Combatant id or Array of ids for which to roll
+   * @param {string|null} [formula]   A non-default initiative formula to roll. Otherwise the system default is used.
+   * @param {boolean} [updateTurn]    Update the Combat turn after adding new initiative scores to keep the turn on
+   *                                  the same Combatant.
+   * @param {object} [messageOptions] Additional options with which to customize created Chat Messages
+   * @return {Promise<Combat>}        A promise which resolves to the updated Combat entity once updates are complete.
    */
-  async rollInitiative(ids, formula=null, messageOptions={}) {
+  async rollInitiative(ids, {formula=null, updateTurn=true, messageOptions={}}={}) {
 
     // Structure input data
     ids = typeof ids === "string" ? [ids] : ids;
@@ -509,7 +537,8 @@ class Combat extends Entity {
           token: c.token._id,
           alias: c.token.name
         },
-        flavor: `${c.token.name} rolls for Initiative!`
+        flavor: `${c.token.name} rolls for Initiative!`,
+        flags: {"core.initiativeRoll": true}
       }, messageOptions);
       const chatData = roll.toMessage(messageData, {rollMode, create:false});
       if ( i > 0 ) chatData.sound = null;   // Only play 1 sound for the whole set
@@ -524,7 +553,9 @@ class Combat extends Entity {
     await this.updateEmbeddedEntity("Combatant", updates);
 
     // Ensure the turn order remains with the same combatant
-    await this.update({turn: this.turns.findIndex(t => t._id === currentId)});
+    if ( updateTurn ) {
+      await this.update({turn: this.turns.findIndex(t => t._id === currentId)});
+    }
 
     // Create multiple chat messages
     await CONFIG.ChatMessage.entityClass.create(messages);
@@ -540,7 +571,7 @@ class Combat extends Entity {
    * Modules or systems could choose to override or extend this to accommodate special situations.
    * @private
    *
-   * @param {Object} combatant      Data for the specific combatant for whom to acquire an initiative formula. This
+   * @param {object} combatant      Data for the specific combatant for whom to acquire an initiative formula. This
    *                                is not used by default, but provided to give flexibility for modules and systems.
    * @return {string}               The initiative formula to use for this combatant.
    */
@@ -553,14 +584,14 @@ class Combat extends Entity {
   /**
    * Get a Roll object which represents the initiative roll for a given combatant.
    * @private
-   * @param {Object} combatant      Data for the specific combatant for whom to acquire an initiative formula. This
+   * @param {object} combatant      Data for the specific combatant for whom to acquire an initiative formula. This
    *                                is not used by default, but provided to give flexibility for modules and systems.
-   * @param {string} [formula]      An explicit Roll formula to use for the combatant.
+   * @param {string} formula        An explicit Roll formula to use for the combatant.
    * @return {Roll}                 The Roll instance to use for the combatant.
    */
   _getInitiativeRoll(combatant, formula) {
     const rollData = combatant.actor ? combatant.actor.getRollData() : {};
-    return new Roll(formula, rollData).roll();
+    return Roll.create(formula, rollData).roll();
   }
 
   /* -------------------------------------------- */
@@ -587,21 +618,30 @@ class Combat extends Entity {
 
   /* -------------------------------------------- */
 
-  /** @extends {Entity.createEmbeddedEntity} */
+  /**
+   * Create a new Combatant embedded entity
+   * @see {@link Combat#createEmbeddedEntity}
+   */
   async createCombatant(data, options) {
     return this.createEmbeddedEntity("Combatant", data, options);
   }
 
   /* -------------------------------------------- */
 
-  /** @extends {Entity.updateEmbeddedEntity} */
+  /**
+   * Update an existing Combatant embedded entity
+   * @see {@link Combat#updateEmbeddedEntity}
+   */
   async updateCombatant(data, options) {
     return this.updateEmbeddedEntity("Combatant", data, options);
   }
 
   /* -------------------------------------------- */
 
-  /** @extends {Entity.deleteEmbeddedEntity} */
+  /**
+   * Delete an existing Combatant embedded entity
+   * @see {@link Combat#deleteEmbeddedEntity}
+   */
   async deleteCombatant(id, options) {
     return this.deleteEmbeddedEntity("Combatant", id, options);
   }
@@ -618,15 +658,15 @@ class Combat extends Entity {
   /* -------------------------------------------- */
 
   /** @override */
-	_onUpdate(data, ...args) {
-	  super._onUpdate(data, ...args);
+  _onUpdate(data, ...args) {
+    super._onUpdate(data, ...args);
 
-	  // Update state tracking
+    // Update state tracking
     this.previous = this.current;
     let c = this.combatant;
     this.current = {round: this.data.round, turn: this.data.turn, tokenId: c ? c.tokenId : null};
 
-	  // If the Combat was set as active, initialize the sidebar
+    // If the Combat was set as active, initialize the sidebar
     if ( (data.active === true) && ( this.data.scene === game.scenes.viewed._id ) ) {
       ui.combat.initialize({combat: this});
     }
@@ -662,4 +702,3 @@ class Combat extends Entity {
     if ( this === this.collection.viewed ) this.collection.render();
   }
 }
-Combat.CONFIG_SETTING = "combatTrackerConfig";

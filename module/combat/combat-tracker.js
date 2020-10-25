@@ -1,4 +1,5 @@
 import { FFCombatTrackerConfig } from "./combat-tracker-config.js";
+import { FFCombatantConfig } from "./combatant-config.js";
 export class FFCombatTracker extends SidebarTab {
   constructor(options) {
     super(options);
@@ -17,12 +18,6 @@ export class FFCombatTracker extends SidebarTab {
      */
     this.combat = null;
 
-    /**
-     * Cache the values of additional tracked resources for each Token in Combat
-     * @type {Object}
-     */
-    this.trackedResources = {};
-
     // Initialize the starting encounter
     this.initialize({render: false});
   }
@@ -30,8 +25,8 @@ export class FFCombatTracker extends SidebarTab {
   /* -------------------------------------------- */
 
   /** @override */
-	static get defaultOptions() {
-	  return mergeObject(super.defaultOptions, {
+  static get defaultOptions() {
+    return mergeObject(super.defaultOptions, {
       id: "combat",
       template: "systems/ffrpg4e/templates/combat/combat-tracker.html",
       title: "Combat Tracker",
@@ -39,18 +34,18 @@ export class FFCombatTracker extends SidebarTab {
     });
   }
 
-	/* -------------------------------------------- */
-	/*  Methods
-	/* -------------------------------------------- */
+  /* -------------------------------------------- */
+  /*  Methods
+  /* -------------------------------------------- */
 
-	/** @override */
-	createPopout() {
+  /** @override */
+  createPopout() {
     const pop = super.createPopout();
     pop.initialize({combat: this.combat, render: true});
     return pop;
-	}
+  }
 
-	/* -------------------------------------------- */
+  /* -------------------------------------------- */
 
   /**
    * Initialize the combat tracker to display a specific combat encounter.
@@ -58,9 +53,9 @@ export class FFCombatTracker extends SidebarTab {
    * @param {Combat|null} combat    The combat encounter to initialize
    * @param {boolean} render        Whether to re-render the sidebar after initialization
    */
-	initialize({combat=null, render=true}={}) {
+  initialize({combat=null, render=true}={}) {
 
-	  // Retrieve a default encounter if none was provided
+    // Retrieve a default encounter if none was provided
     if ( combat === null ) {
       const view = game.scenes.viewed;
       const combats = view ? game.combats.entities.filter(c => c.data.scene === view._id) : [];
@@ -73,42 +68,12 @@ export class FFCombatTracker extends SidebarTab {
 
     // Trigger data computation
     if ( combat && !combat.turns ) combat.turns = combat.setupTurns();
-    this.updateTrackedResources();
 
     // Also initialize the popout
     if ( this._popout ) this._popout.initialize({combat, render: false});
 
     // Render the tracker
     if ( render ) this.render();
-  }
-
-	/* -------------------------------------------- */
-
-  /**
-   * Update the value of tracked resources which are reported for each combatant
-   * @return {Object}
-   */
-  updateTrackedResources() {
-    const combat = this.combat;
-    if ( !combat ) return this.trackedResources = {};
-    const resources = [combat.settings.resource,combat.settings.thing];    // For future tracking of multiple resources
-    console.log("tracked", resources)
-    //tracked resource = object {turns{resources}}
-    //obj["objid"]={resource[r], resource[r]}
-    this.trackedResources = combat.turns.reduce((obj, t) => {
-      const token = new Token(t.token);
-      let obs = t.actor && t.actor.hasPerm(game.user, "OBSERVER");
-      obj[token.id] = resources.reduce((res, r) => {
-        res[r] = obs && t.actor ? getProperty(token.actor.data.data, r) : null;
-        return res;
-      }, {});
-      console.log("obj",t)
-      return obj;
-    }, {});
-    console.log("r", this.trackedResources)
-    // Synchronize updates with the pop-out tracker
-    if ( this._popout ) this._popout.trackedResources = this.trackedResources;
-    return this.trackedResources;
   }
 
   /* -------------------------------------------- */
@@ -134,7 +99,7 @@ export class FFCombatTracker extends SidebarTab {
     // Get the combat encounters possible for the viewed Scene
     const combat = this.combat;
     const hasCombat = combat !== null;
-    const view = canvas.scene;
+    const view = canvas?.scene || null;
     const combats = view ? game.combats.entities.filter(c => c.data.scene === view._id) : [];
     const currentIdx = combats.findIndex(c => c === this.combat);
     const previousId = currentIdx > 0 ? combats[currentIdx-1].id : null;
@@ -161,40 +126,42 @@ export class FFCombatTracker extends SidebarTab {
     // Add active combat data
     const combatant = combat.combatant;
     const hasControl = combatant && combatant.players && combatant.players.includes(game.user);
-    // Update data for combatant turns
-    const decimals = CONFIG.Combat.initiative.decimals;
-    console.log("turns",combat.turns)
+
+    // Format transient information about the combatant
+    let hasDecimals = false;
     const turns = [];
     for ( let [i, t] of combat.turns.entries() ) {
       if ( !t.visible ) continue;
-      // Name and Image
-      t.name = t.token.name || t.actor.name;
-      if ( t.defeated ) t.img = CONFIG.controlIcons.defeated;
-      else if ( VideoHelper.hasVideoExtension(t.token.img) ) {
-        t.img = await game.video.createThumbnail(t.token.img, {width: 100, height: 100});
-      }
-      else t.img = t.token.img || t.actor.img;
+      const c = duplicate(t);
+      if ( !hasDecimals && !Number.isInteger(c.initiative) ) hasDecimals = true;
 
-      // Turn order and initiative
-      t.active = i === combat.turn;
-      t.initiative = isNaN(parseFloat(t.initiative)) ? null : Number(t.initiative).toFixed(decimals);
-      t.hasRolled = t.initiative !== null;
+      // Token status effect icons
+      c.effects = new Set(c.token?.effects || []);
+      if ( c.token?.overlayEffect ) c.effects.add(c.token.overlayEffect);
+      if ( t.actor ) t.actor.temporaryEffects.forEach(e => {
+        if ( e.getFlag("core", "statusId") === CONFIG.Combat.defeatedStatusId ) c.defeated = true;
+        else if ( e.data.icon ) c.effects.add(e.data.icon);
+      });
 
-      // Styling rules
-      t.css = [
-        t.active ? "active" : "",
-        t.hidden ? "hidden" : "",
-        t.defeated ? "defeated" : ""
+      // Track resources
+      if ( c.permission < ENTITY_PERMISSIONS.OBSERVER ) c.resource = null;
+
+      // Rendering states
+      c.active = i === combat.turn;
+      c.css = [
+        c.active ? "active" : "",
+        c.hidden ? "hidden" : "",
+        c.defeated ? "defeated" : ""
       ].join(" ").trim();
-
-      // Tracked resources
-      t.resource = this.trackedResources[t.tokenId][settings.resource];
-      t.thing = this.trackedResources[t.tokenId][settings.thing];
-      t.actor.initDice=t.initDice
-      // t.arrtest=t.arrtest.sort(function(a, b){return a-b});
-      turns.push(t);
+      c.hasRolled = c.initiative !== null;
+      c.hasResource = c.resource !== null;
+      turns.push(c);
     }
-    console.log("t",turns)
+
+    // Format displayed decimal places in the tracker
+    turns.forEach(c => {
+      c.initiative = c.initiative ? c.initiative.toFixed(hasDecimals ? CONFIG.Combat.initiative.decimals : 0) : null;
+    });
 
     // Merge update data for rendering
     return mergeObject(data, {
@@ -208,24 +175,24 @@ export class FFCombatTracker extends SidebarTab {
   /* -------------------------------------------- */
 
   /** @override */
-	activateListeners(html) {
-	  super.activateListeners(html);
-	  const tracker = html.find("#combat-tracker");
-	  const combatants = tracker.find(".combatant");
+  activateListeners(html) {
+    super.activateListeners(html);
+    const tracker = html.find("#combat-tracker");
+    const combatants = tracker.find(".combatant");
 
-	  // Create new Combat encounter
+    // Create new Combat encounter
     html.find('.combat-create').click(ev => this._onCombatCreate(ev));
 
     // Display Combat settings
     html.find('.combat-settings').click(ev => {
       ev.preventDefault();
-      new FFCombatTrackerConfig().render(true);
+      new CombatTrackerConfig().render(true);
     });
 
     // Cycle the current Combat encounter
     html.find('.combat-cycle').click(ev => this._onCombatCycle(ev));
 
-	  // Combat control
+    // Combat control
     html.find('.combat-control').click(ev => this._onCombatControl(ev));
 
     // Combatant control
@@ -334,13 +301,7 @@ export class FFCombatTracker extends SidebarTab {
 
       // Toggle combatant defeated flag
       case "toggleDefeated":
-        let isDefeated = !c.defeated;
-        await this.combat.updateCombatant({_id: c._id, defeated: isDefeated});
-        const token = canvas.tokens.get(c.tokenId);
-        if ( token ) {
-          if ( isDefeated && !token.data.overlayEffect ) token.toggleOverlay(CONFIG.controlIcons.defeated);
-          else if ( !isDefeated && token.data.overlayEffect === CONFIG.controlIcons.defeated ) token.toggleOverlay(null);
-        }
+        await this._onToggleDefeatedStatus(c);
         break;
 
       // Roll combatant initiative
@@ -356,6 +317,26 @@ export class FFCombatTracker extends SidebarTab {
   /* -------------------------------------------- */
 
   /**
+   * Handle toggling the defeated status effect on a combatant Token
+   * @param {Combatant} c     The combatant data being modified
+   * @return {Promise<void>}
+   * @private
+   */
+  async _onToggleDefeatedStatus(c) {
+    let isDefeated = !c.defeated;
+    await this.combat.updateCombatant({_id: c._id, defeated: isDefeated});
+    const token = canvas.tokens.get(c.tokenId);
+    if ( !token ) return;
+
+    // Push the defeated status to the token
+    let status = CONFIG.statusEffects.find(e => e.id === CONFIG.Combat.defeatedStatusId);
+    let effect = token.actor && status ? status : CONFIG.controlIcons.defeated;
+    await token.toggleEffect(effect, {overlay: true, active: isDefeated});
+  }
+
+  /* -------------------------------------------- */
+
+  /**
    * Handle mouse-down event on a combatant name in the tracker
    * @private
    * @param {Event} event   The originating mousedown event
@@ -366,7 +347,7 @@ export class FFCombatTracker extends SidebarTab {
 
     const li = event.currentTarget;
     const token = canvas.tokens.get(li.dataset.tokenId);
-    if ( !token.owner ) return;
+    if ( !token?.owner ) return;
     const now = Date.now();
 
     // Handle double-left click to open sheet
@@ -434,17 +415,17 @@ export class FFCombatTracker extends SidebarTab {
   _getEntryContextOptions() {
     return [
       {
-        name: "Modify",
+        name: "COMBAT.CombatantUpdate",
         icon: '<i class="fas fa-edit"></i>',
-        callback: li => this._showModifyCombatantInitiativeContext(li)
+        callback: this._onConfigureCombatant.bind(this)
       },
       {
-        name: "Reroll",
+        name: "COMBAT.CombatantReroll",
         icon: '<i class="fas fa-dice-d20"></i>',
         callback: li => this.combat.rollInitiative(li.data('combatant-id'))
       },
       {
-        name: "Remove",
+        name: "COMBAT.CombatantRemove",
         icon: '<i class="fas fa-skull"></i>',
         callback: li => this.combat.deleteCombatant(li.data('combatant-id'))
       }
@@ -458,30 +439,9 @@ export class FFCombatTracker extends SidebarTab {
    * @param {jQuery} li
    * @private
    */
-  _showModifyCombatantInitiativeContext(li) {
+  _onConfigureCombatant(li) {
     const combatant = this.combat.getCombatant(li.data('combatant-id'));
-    new Dialog({
-      title: `Modify ${combatant.name} Initiative`,
-      content: `<div class="form-group">
-                  <label>Initiative Value</label>
-                  <input name="initiative" value="${combatant.initiative || ""}" placeholder="Value"/>
-                </div>`,
-      buttons: {
-        set: {
-          icon: '<i class="fas fa-dice-d20"></i>',
-          label: "Modify Roll",
-          callback: html => {
-            let init = parseFloat(html.find('input[name="initiative"]').val());
-            this.combat.setInitiative(combatant._id, Math.round(init * 100) / 100);
-          }
-        },
-        cancel: {
-          icon: '<i class="fas fa-times"></i>',
-          label: "Cancel"
-        }
-      },
-      default: "set"
-    }, {
+    new FFCombatantConfig(combatant, {
       top: Math.min(li[0].offsetTop, window.innerHeight - 350),
       left: window.innerWidth - 720,
       width: 400

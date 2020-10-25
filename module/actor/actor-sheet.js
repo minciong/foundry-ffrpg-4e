@@ -60,7 +60,20 @@ export class FFRPGActorSheet extends ActorSheet {
     });
 
     // Rollable abilities.
+    html.find('.item .item-image').click(event => this._onItemRoll(event));
+    // html.find('h4.item-name').click(event => this._onItemSummary(event));
     html.find('.rollable').click(this._onRoll.bind(this));
+    if (this.actor.owner) {
+    let handler = ev => this._onDragStart(ev);
+    // Find all items on the character sheet.
+    html.find('li.item').each((i, li) => {
+      // Ignore for the header row.
+      if (li.classList.contains("item-header")) return;
+      // Add draggable attribute and dragstart listener.
+      li.setAttribute("draggable", true);
+      li.addEventListener("dragstart", handler, false);
+    });
+  }
   }
 
   /* -------------------------------------------- */
@@ -111,5 +124,52 @@ export class FFRPGActorSheet extends ActorSheet {
       });
     }
   }
+  _onItemRoll(event) {
+    event.preventDefault();
+    const itemId = event.currentTarget.closest(".item").dataset.itemId;
+    const item = this.actor.getOwnedItem(itemId);
+    const actor = item.actor
+    console.log(this);
+    switch(item.data.type){
+      case "action":console.log(item);this._handleAction(item);break
+      case "armor":this._equipArmor(item);item.roll();break
+      case "weapon":console.log("weapon");item.roll();break
+      default: console.log(item);item.roll();break
+    }
+  }
+  _equipArmor(armor){
+    let actor = armor.actor;
+    actor.data.data.arm = armor.data.data.arm
+    actor.data.data.marm = armor.data.data.marm
+    this.form.elements["data.arm"].value=armor.data.data.arm
+    this.form.elements["data.marm"].value=armor.data.data.marm
+  }
+  _handleAction(action){
+    let actor = action.actor;
+    if((action.data.data.mpCost>0&&actor.data.data.mana.value>action.data.data.mpCost)){
+        actor.data.data.mana.value-=action.data.data.mpCost
+        this.form.elements["data.mana.value"].value=actor.data.data.mana.value
+      }
+        action.roll();
+  }
+  _onItemSummary(event) {
+    event.preventDefault();
+    let li = $(event.currentTarget).parents(".item"),
+        item = this.actor.getOwnedItem(li.data("item-id")),
+        chatData = item.getChatData({secrets: this.actor.owner});
 
+    // Toggle summary
+    if ( li.hasClass("expanded") ) {
+      let summary = li.children(".item-summary");
+      summary.slideUp(200, () => summary.remove());
+    } else {
+      let div = $(`<div class="item-summary">${chatData.description.value}</div>`);
+      let props = $(`<div class="item-properties"></div>`);
+      chatData.properties.forEach(p => props.append(`<span class="tag">${p}</span>`));
+      div.append(props);
+      li.append(div.hide());
+      div.slideDown(200);
+    }
+    li.toggleClass("expanded");
+  }
 }

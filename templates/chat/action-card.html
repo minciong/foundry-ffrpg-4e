@@ -1,0 +1,37 @@
+<div class="ffrpg4e chat-card item-card" data-actor-id="{{actor._id}}" data-item-id="{{item._id}}"
+     {{#if tokenId}}data-token-id="{{tokenId}}"{{/if}}>
+    <header class="card-header flexrow">
+        <img src="{{item.img}}" title="{{item.name}}" width="36" height="36"/>
+        <h3 class="item-name">{{item.name}}</h3>
+    </header>
+
+    <div class="card-content">
+        {{{item.data.description}}}
+        {{localize item.data.speedName}}
+        
+    </div>
+
+    <div class="dice-roll">
+        {{#if flavor}}
+        <div class="dice-flavor">{{flavor}}</div>
+        {{/if}}
+        {{#if hasAttack}}
+        <div class="dice-result">
+            <div class="dice-formula">{{formula}}</div>
+            {{{tooltip}}}
+            <h4 class="dice-total"{{#if isCrit}}style = "color:green"{{/if}}>{{total}}</h4>
+            <h4 class="dice-total"{{#if isCrit}}style = "color:green"{{/if}}>DC {{difficulty}}: {{postDiff}}</h4>
+            {{#if hasDamage}}
+            <div class="dice-formula">DAMAGE/HEALING: {{damageTooltip}}</div>
+            <h4 class="dice-total"{{#if isCrit}}style = "color:green"{{/if}}> {{damage}} {{damageType}} {{damageElement}}</h4>
+            {{/if}}
+        </div>
+        {{/if}}
+    </div>
+
+    <footer class="card-footer">
+        {{#each data.properties}}
+        <span>{{this}}</span>
+        {{/each}}
+    </footer>
+</div>

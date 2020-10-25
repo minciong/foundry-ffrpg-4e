@@ -18,7 +18,8 @@
 			"water":"Water",
 			"bio":"Bio",
 			"light":"Light",
-			"shadow":"Shadow"
+			"shadow":"Shadow",
+			"healing":"Healing"
 		},
 		"damage":{
 			"physical": "Physical",
@@ -29,14 +30,21 @@
 			"medium":"Medium Armor",
 			"heavy":"Heavy Armor"
 		},
-		"weapon":{
+		"action":{
 			"damageBase": "Damage Base",
 		    "element" : "Element",
 		    "damageType" : "Physical/Magical",
 		    "userStat": "User Stat",
 		    "targetStat": "Target Stat",
 		    "actionModifier": "Action Modifier",
-	    	"difficulty": "DC"
+	    	"difficulty": "DC",
+	    	"mpCost":"MP Cost",
+		    "actionSpeed":"Action Speed"
+		},
+		"speed":{
+			"quick":"Quick",
+			"slow": "Slow",
+			"reaction": "Reaction"
 		},
 		"skill":{
 			"strength": "Strength",

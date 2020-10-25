@@ -13,8 +13,6 @@ export class FFCombatTrackerConfig extends FormApplication {
 
   /** @override */
   async getData(options) {
-    console.log(this)
-    console.log("attributes",this.getAttributeChoices())
     return {
       settings: game.settings.get("core", Combat.CONFIG_SETTING),
       attributeChoices: this.getAttributeChoices()
@@ -25,7 +23,6 @@ export class FFCombatTrackerConfig extends FormApplication {
 
   /** @override */
   async _updateObject(event, formData) {
-    console.log("formdata", formData);
     return game.settings.set("core", Combat.CONFIG_SETTING, {
       resource: formData.resource,
       thing: formData.thing,

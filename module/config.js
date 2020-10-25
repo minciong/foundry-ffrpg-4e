@@ -19,12 +19,23 @@ ffrpg4e.elementTypes = {
 	water:"ffrpg4e.element.water",
 	bio:"ffrpg4e.element.bio",
 	light:"ffrpg4e.element.light",
-	shadow:"ffrpg4e.element.shadow"
+	shadow:"ffrpg4e.element.shadow",
+	healing:"ffrpg4e.element.healing"
 
 }
 ffrpg4e.damageTypes= {
 	physical: "ffrpg4e.damage.physical",
 	magical: "ffrpg4e.damage.magical"
+}
+ffrpg4e.speedTypes= {
+	quick: "ffrpg4e.speed.quick",
+	slow: "ffrpg4e.speed.slow",
+	reaction:"ffrpg4e.speed.reaction",
+}
+ffrpg4e.armorTypes ={
+	light:"ffrpg4e.armor.light",
+	medium:"ffrpg4e.armor.medium",
+	heavy:"ffrpg4e.armor.heavy"
 }
 ffrpg4e.skillTypes = {
 	  strength:"ffrpg.skill.strength",

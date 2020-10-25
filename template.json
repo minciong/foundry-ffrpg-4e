@@ -141,24 +141,23 @@
     "weapon":{
       "templates": ["base"],
       "damageBase": 0,
-      "element" : "Crush",
-      "damageType" : "Physical",
-      "userStat": "Earth",
-      "targetStat": "Earth",
+      "element" : "crush",
+      "damageType" : "physical",
+      "userStat": "earth",
+      "targetStat": "earth",
       "actionModifier": 1.0,
       "difficulty": 0
      },
      "action":{
       "templates": ["base"],
       "damageBase": 0,
-      "element" : "Crush",
-      "damageType" : "Physical",
-      "userStat": "Earth",
-      "targetStat": "Earth",
+      "element" : "crush",
+      "damageType" : "physical",
+      "userStat": "earth",
+      "targetStat": "earth",
       "actionModifier": 1.0,
       "difficulty": 0,
       "mpCost":0,
-      "actionType":"quick",
       "actionSpeed":0
      },
      "armor":{

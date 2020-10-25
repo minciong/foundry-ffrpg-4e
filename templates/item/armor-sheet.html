@@ -25,10 +25,6 @@
     {{!-- Sheet Body --}}
     <section class="sheet-body">
 
-        {{!-- Description Tab --}}
-        <div class="tab" data-group="primary" data-tab="description">
-            {{editor content=data.description target="data.description" button=true owner=owner editable=editable}}
-        </div>
         {{!-- Attributes Tab --}}
         <div class="tab attributes" data-group="primary" data-tab="attributes">
             {{!-- As you add new fields, add them in here! --}}
@@ -44,9 +40,11 @@
                     
                     <td>
                         <select name = "data.type">
-                            <option value="light">{{localize "ffrpg4e.armor.light"}}</option>
-                            <option value="medium">{{localize "ffrpg4e.armor.medium"}}</option>
-                            <option value="heavy">{{localize "ffrpg4e.armor.heavy"}}</option>
+
+                            {{#each config.armorTypes as |name type|}}
+                             <option value="{{type}}"{{#if_eq ../data.type type}}selected
+                            {{/if_eq}}>{{localize name}}</option>
+                            {{/each}}
                             
                         </select>
                     </td>
@@ -62,5 +60,9 @@
             </table>
         </div>
 
+        {{!-- Description Tab --}}
+        <div class="tab" data-group="primary" data-tab="description">
+            {{editor content=data.description target="data.description" button=true owner=owner editable=editable}}
+        </div>
     </section>
 </form>

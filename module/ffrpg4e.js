@@ -5,15 +5,17 @@ import { FFRPGItem } from "./item/item.js";
 import { FFRPGItemSheet } from "./item/item-sheet.js";
 import { FFCombatTracker } from "./combat/combat-tracker.js";
 import { FFCombatTrackerConfig } from "./combat/combat-tracker-config.js";
+// import { createFFRPG4eMacro, rollItemMacro } from "./macros.js";
 import * as FFCombat from "./combat/combat.js";
 import {ffrpg4e} from "./config.js"
 Hooks.once('init', async function() {
 
   game.ffrpg4e = {
     FFRPGActor,
-    FFRPGItem
+    FFRPGItem,
+    rollItemMacro
   };
-
+  Hooks.on("hotbarDrop", (bar, data, slot) => createFFRPG4eMacro(data, slot));
   /**
    * Set an initiative formula for the system
    * @type {String}
@@ -34,7 +36,8 @@ Hooks.once('init', async function() {
   CONFIG.Item.entityClass = FFRPGItem;
   CONFIG.ffrpg4e = ffrpg4e;
   CONFIG.ui.combat=FFCombatTracker;
-  // Combat.CONFIG_SETTING = FFCombatTrackerConfig
+  Combat.CONFIG_SETTING = FFCombatTrackerConfig
+  
   // Register sheet application classes
   Actors.unregisterSheet("core", ActorSheet);
   Actors.registerSheet("ffrpg4e", FFRPGActorSheet, { makeDefault: true });
@@ -63,3 +66,52 @@ Hooks.once('init', async function() {
     }
 });
 });
+/* -------------------------------------------- */
+/*  Hotbar Macros                               */
+/* -------------------------------------------- */
+
+/**
+ * Create a Macro from an Item drop.
+ * Get an existing item macro if one exists, otherwise create a new one.
+ * @param {Object} data     The dropped data
+ * @param {number} slot     The hotbar slot to use
+ * @returns {Promise}
+ */
+async function createFFRPG4eMacro(data, slot) {
+  if (data.type !== "Item") return;
+  if (!("data" in data)) return ui.notifications.warn("You can only create macro buttons for owned Items");
+  const item = data.data;
+
+  // Create the macro command
+  const command = `game.ffrpg4e.rollItemMacro("${item.name}");`;
+  let macro = game.macros.entities.find(m => (m.name === item.name) && (m.command === command));
+  if (!macro) {
+    macro = await Macro.create({
+      name: item.name,
+      type: "script",
+      img: item.img,
+      command: command,
+      flags: { "boilerplate.itemMacro": true }
+    });
+  }
+  game.user.assignHotbarMacro(macro, slot);
+  return false;
+}
+
+/**
+ * Create a Macro from an Item drop.
+ * Get an existing item macro if one exists, otherwise create a new one.
+ * @param {string} itemName
+ * @return {Promise}
+ */
+function rollItemMacro(itemName) {
+  const speaker = ChatMessage.getSpeaker();
+  let actor;
+  if (speaker.token) actor = game.actors.tokens[speaker.token];
+  if (!actor) actor = game.actors.get(speaker.actor);
+  const item = actor ? actor.items.find(i => i.name === itemName) : null;
+  if (!item) return ui.notifications.warn(`Your controlled Actor does not have an item named ${itemName}`);
+
+  // Trigger the item roll
+  return item.roll();
+}

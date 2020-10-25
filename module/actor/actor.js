@@ -18,7 +18,13 @@ export class FFRPGActor extends Actor {
     // things organized.
     if (actorData.type === 'character') this._prepareCharacterData(actorData);
   }
-
+  // equipArmor(armor){
+  //   console.log(armor.data.data, this.data.data)
+  //   this.data.data.arm = armor.data.data.arm
+  //   this.data.data.marm = armor.data.data.marm
+  //   this.prepareData();
+  // }
+ 
   /**
    * Prepare Character type specific data
    */

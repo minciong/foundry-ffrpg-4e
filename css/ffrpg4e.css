@@ -230,8 +230,15 @@
   -ms-flex: 0 0 24px;
   flex: 0 0 24px;
   margin-right: 5px;
+  cursor: pointer;
+  background-size: 24px
 }
-
+.rollable:hover .item-image {
+  background-image: url("/icons/svg/d10-grey.svg") !important;
+}
+.rollable .item-image:hover {
+  background-image: url("/systems/ffrpg4e/icons/svg/d10-black.svg") !important;
+}
 .ffrpg4e .items-list .item img {
   display: block;
 }
@@ -246,3 +253,28 @@
   flex: 0 0 86px;
   text-align: right;
 }
+.ffrpg .chat-card {
+  font-style: normal;
+  font-size: 12px;
+}
+.ffrpg4e.chat-card .card-header {
+    padding: 3px 0;
+    border-top: 2px groove #FFF;
+    border-bottom: 2px groove #FFF;
+}
+.ffrpg4e.chat-card .card-header img {
+      flex: 0 0 36px;
+      margin-right: 5px;
+    }
+.ffrpg4e.chat-card .card-header :hover {
+        color: #111;
+        text-shadow: 0 0 10px red;
+      }
+.ffrpg4e.chat-card .card-header h3 {
+      flex: 1;
+      margin: 0;
+      line-height: 36px;
+      color: @colorOlive;
+      
+    }
+  }
