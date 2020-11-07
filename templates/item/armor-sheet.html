@@ -40,11 +40,11 @@
                     
                     <td>
                         <select name = "data.type">
-
+                            {{#select data.type}}
                             {{#each config.armorTypes as |name type|}}
-                             <option value="{{type}}"{{#if_eq ../data.type type}}selected
-                            {{/if_eq}}>{{localize name}}</option>
+                             <option value="{{type}}">{{localize name}}</option>
                             {{/each}}
+                            {{/select}}
                             
                         </select>
                     </td>

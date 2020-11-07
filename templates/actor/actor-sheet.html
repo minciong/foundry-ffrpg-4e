@@ -73,13 +73,15 @@
         {{!-- Biography Tab --}}
         <div class="tab biography" data-group="primary" data-tab="stats">
           <div>
-          <input name = "data.expVal" type = "checkbox" {{checked data.expVal}}><label for="data.expVal">Calculate Using Exp</label><br>
-          <span>{{data.attributes.exp.spent}}/<input type="text" name="data.attributes.exp.total" value="{{data.attributes.exp.total}}" data-dtype="Number"/> </span></div>
+            <input name = "data.expVal" type = "checkbox" {{checked data.expVal}}>
+            <label for="data.expVal">Calculate Using Exp</label><br>
+            {{data.attributes.exp.spent}}/<input type="text" name="data.attributes.exp.total" value="{{data.attributes.exp.total}}" data-dtype="Number"/> 
+          </div>
           <span>Level: {{data.attributes.level.value}}</span>
           <div class="abilities grid grid-4col">
             {{#each data.abilities as |ability key|}}
               <div class="ability flexcol flex-group-center">
-                <label><span class="resource-label ability-mod rollable" data-roll="d100+@abilities.{{key}}.value" data-label="{{key}}">{{key}}</span>: Level {{numberFormat ability.level decimals=0}}</label>
+                <label><span class="resource-label ability-mod rollable" data-roll="d100+@abilities.{{key}}.value" data-label="{{key}}">{{key}}: Level {{numberFormat ability.level decimals=0}}</span></label>
                 <label for="data.abilities.{{key}}.exp" class="resource-label">EXP</label>
                 <input type="text" name="data.abilities.{{key}}.exp" value="{{ability.exp}}" data-dtype="Number" min ="0"/>
                 <label for="data.abilities.{{key}}.value" class="resource-label">POINTS</label>
@@ -89,7 +91,7 @@
             {{/each}}
           </div>
         </div>
-        <div class="tab biography" data-group="primary" data-tab="class">
+        <div class="tab class" data-group="primary" data-tab="class">
           <div class="resources grid grid-2col">
               <div class="resource flex-group-center">
                   <label for="data.attributes.job.main" class="resource-label">Main Job</label>

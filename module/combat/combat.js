@@ -20,7 +20,8 @@ export const rollInitiative = async function(ids, formula=null, messageOptions={
       const cf = formula || this._getInitiativeFormula(c);
       const roll = this._getInitiativeRoll(c, cf);
       const iDice=roll.dice[0].results.map(x=>x.result).sort(function(a, b){return a-b})
-      updates.push({_id: id, initiative: roll.total,initDice:iDice});
+      updates.push({_id: id, initiative: roll.total,initDice:iDice,flags:{initDice:iDice}});
+
 
       // Determine the roll mode
       let rollMode = messageOptions.rollMode || game.settings.get("core", "rollMode");
@@ -81,10 +82,10 @@ export const nextTurn=async function () {
     let skip = this.settings.skipDefeated;
     let phase = (this.round>0 && this.round%10==0)?10:this.round%10;
     let currentTurn = this.turns[turn];
-    var iDice = currentTurn.initDice
+    var iDice = currentTurn.flags.initDice
     while(iDice[0]==phase)iDice.shift();
-    let init=(iDice.length>0)?iDice.reduce((a, c) => a + c):0;
-    await this.updateCombatant({_id: currentTurn._id, initiative: init,initDice:iDice}, {});
+    let init=(iDice.length>0)?iDice.reduce((a, c) => a + c)+(currentTurn.initiative*1000)%1000/1000:0;
+    await this.updateCombatant({_id: currentTurn._id, initiative: init,initDice:iDice,flags:{initDice:iDice}}, {});
     // Determine the next turn number
     let next = null;
     if ( skip ) {
@@ -113,6 +114,31 @@ export const nextTurn=async function () {
 
     // Update the encounter
     return this.update({round: round, turn: next});
+  }
+  export const _prepareCombatant = function(c, scene, players, settings={}) {
+
+    // Populate data about the combatant
+    c.token = scene.getEmbeddedEntity("Token", c.tokenId);
+    c.actor = c.token ? Actor.fromToken(new Token(c.token, scene)) : null;
+    c.name = c.name || c.token?.name || c.actor?.name || game.i18n.localize("COMBAT.UnknownCombatant");
+
+    // Permissions and visibility
+    c.permission = c.actor?.permission ?? 0;
+    c.players = c.actor ? players.filter(u => c.actor.hasPerm(u, "OWNER")) : [];
+    c.owner = game.user.isGM || (c.actor ? c.actor.owner : false);
+    c.resource = c.actor ? getProperty(c.actor.data.data, settings.resource) : null;
+
+    // Combatant thumbnail image
+    c.img = c.img ?? c.token?.img ?? c.actor?.img ?? CONST.DEFAULT_TOKEN;
+    if ( VideoHelper.hasVideoExtension(c.img) ) {
+      game.video.createThumbnail(c.img, {width: 100, height: 100}).then(thumb => c.img = thumb);
+    }
+
+    // Set state information
+    c.initiative = Number.isNumeric(c.initiative) ? Number(c.initiative) : null;
+    c.initDice = c.flags.initDice? c.flags.initDice:[];
+    c.visible = c.owner || !c.hidden;
+    return c;
   }
 class Combat extends Entity {
   constructor(...args) {

@@ -31,6 +31,7 @@ Hooks.once('init', async function() {
   Combat.prototype.rollInitiative = FFCombat.rollInitiative;
   Combat.prototype.setInitiative=FFCombat.setInitiative
   Combat.prototype._getInitiativeFormula = FFCombat._getInitiativeFormula;
+  // Combat.prototype._prepareCombatant = FFCombat._prepareCombatant;
   Combat.prototype.nextTurn = FFCombat.nextTurn
   CONFIG.Actor.entityClass = FFRPGActor;
   CONFIG.Item.entityClass = FFRPGItem;

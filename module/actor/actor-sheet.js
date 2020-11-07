@@ -60,7 +60,7 @@ export class FFRPGActorSheet extends ActorSheet {
     });
 
     // Rollable abilities.
-    html.find('.item .item-image').click(event => this._onItemRoll(event));
+    html.find('.item .item-image').click(event => this._onItemRoll(event,html));
     // html.find('h4.item-name').click(event => this._onItemSummary(event));
     html.find('.rollable').click(this._onRoll.bind(this));
     if (this.actor.owner) {
@@ -124,15 +124,15 @@ export class FFRPGActorSheet extends ActorSheet {
       });
     }
   }
-  _onItemRoll(event) {
+  _onItemRoll(event,html) {
     event.preventDefault();
     const itemId = event.currentTarget.closest(".item").dataset.itemId;
     const item = this.actor.getOwnedItem(itemId);
     const actor = item.actor
     console.log(this);
     switch(item.data.type){
-      case "action":console.log(item);this._handleAction(item);break
-      case "armor":this._equipArmor(item);item.roll();break
+      case "action":console.log(item);this._handleAction(item);this._onSubmit(event);break
+      case "armor":this._equipArmor(item);item.roll();this._onSubmit(event);break
       case "weapon":console.log("weapon");item.roll();break
       default: console.log(item);item.roll();break
     }
@@ -141,12 +141,15 @@ export class FFRPGActorSheet extends ActorSheet {
     let actor = armor.actor;
     actor.data.data.arm = armor.data.data.arm
     actor.data.data.marm = armor.data.data.marm
+    
     this.form.elements["data.arm"].value=armor.data.data.arm
     this.form.elements["data.marm"].value=armor.data.data.marm
+
+    const update = actor.update({arm:armor.data.data.arm, marm:armor.data.data.marm},{diff:false})
   }
   _handleAction(action){
     let actor = action.actor;
-    if((action.data.data.mpCost>0&&actor.data.data.mana.value>action.data.data.mpCost)){
+    if((action.data.data.mpCost>0&&actor.data.data.mana.value>=action.data.data.mpCost)){
         actor.data.data.mana.value-=action.data.data.mpCost
         this.form.elements["data.mana.value"].value=actor.data.data.mana.value
       }

@@ -21,10 +21,11 @@ export class FFCombatantConfig extends FormApplication {
   /** @override */
   async _updateObject(event, formData) {
     formData.initDice=formData.initDice.split(',').map(die=>parseInt(die)).sort(function(a, b){return a-b}).filter(d=>d>0&&d<=10)
-    formData.initiative=(formData.initiative*1000)%1000/1000+formData.initDice.reduce((a,b)=>a+b)
+    formData.flags={initDice:formData.initDice}
     console.log(formData);
     if ( this.object._id ) {
       formData._id = this.object._id;
+      formData.initiative=(game.combat.getCombatant(this.object._id).initiative*1000)%1000/1000+formData.initDice.reduce((a,b)=>a+b)
       return game.combat.updateCombatant(formData);
     }
     return game.combat.createCombatant(formData);
