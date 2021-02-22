@@ -148,11 +148,11 @@ export class FFRPGActorSheet extends ActorSheet {
     const update = actor.update({arm:armor.data.data.arm, marm:armor.data.data.marm},{diff:false})
   }
   _handleAction(action){
-    let actor = action.actor;
-    if((action.data.data.mpCost>0&&actor.data.data.mana.value>=action.data.data.mpCost)){
-        actor.data.data.mana.value-=action.data.data.mpCost
-        this.form.elements["data.mana.value"].value=actor.data.data.mana.value
-      }
+    // let actor = action.actor;
+    // if((action.data.data.mpCost>0&&actor.data.data.mana.value>=action.data.data.mpCost)){
+    //     actor.data.data.mana.value-=action.data.data.mpCost
+    //     this.form.elements["data.mana.value"].value=actor.data.data.mana.value
+    //   }
         action.roll();
   }
   _onItemSummary(event) {

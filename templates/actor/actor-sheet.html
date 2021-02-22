@@ -72,11 +72,15 @@
 
         {{!-- Biography Tab --}}
         <div class="tab biography" data-group="primary" data-tab="stats">
+          <div class = " grid grid-2col">
           <div>
             <input name = "data.expVal" type = "checkbox" {{checked data.expVal}}>
-            <label for="data.expVal">Calculate Using Exp</label><br>
-            {{data.attributes.exp.spent}}/<input type="text" name="data.attributes.exp.total" value="{{data.attributes.exp.total}}" data-dtype="Number"/> 
+            <label for="data.expVal">Calculate Using Exp</label>
           </div>
+            <div class="resource-content flexrow flex-center flex-between">
+            <span>EXP Budget: </span><span>{{data.attributes.exp.spent}}</span> / <input type="text" name="data.attributes.exp.total" value="{{data.attributes.exp.total}}" data-dtype="Number"/> 
+          </div>
+        </div>
           <span>Level: {{data.attributes.level.value}}</span>
           <div class="abilities grid grid-4col">
             {{#each data.abilities as |ability key|}}
