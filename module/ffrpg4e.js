@@ -64,8 +64,14 @@ Hooks.once('init', async function() {
         return opts.fn(this);
     } else {
         return opts.inverse(this);
-    }
-});
+    }    
+  });
+  Handlebars.registerHelper('concat', function () {
+    var arg = Array.prototype.slice.call(arguments, 0);
+    arg.pop();
+    return arg.join('');
+  });
+
 });
 /* -------------------------------------------- */
 /*  Hotbar Macros                               */

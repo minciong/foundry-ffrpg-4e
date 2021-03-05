@@ -13,7 +13,7 @@
               and it will add a small amount of padding, a border, and will
               center all of its child elements content and text. --}}
               <div class="resource flex-group-center">
-                  <label for="data.health.value" class="resource-label">HP</label>
+                  <label for="data.health.value" class="resource-label">{{localize 'ffrpg4e.core.hp'}}</label>
                   <div class="resource-content flexrow flex-center flex-between">
                     <input type="text" name="data.health.value" value="{{data.health.value}}" data-dtype="Number"/>
                     <span> / </span>
@@ -21,7 +21,7 @@
                   </div>
               </div>
               <div class="resource flex-group-center">
-                  <label for="data.mana.value" class="resource-label">MP</label>
+                  <label for="data.mana.value" class="resource-label">{{localize 'ffrpg4e.core.mp'}}</label>
                   <div class="resource-content flexrow flex-center flex-between">
                     <input type="text" name="data.mana.value" value="{{data.mana.value}}" data-dtype="Number"/>
                     <span> / </span>
@@ -29,21 +29,21 @@
                   </div>
               </div>
               <div class="resource flex-group-center">
-                  <label for="data.arm" class="resource-label">ARM</label>
+                  <label for="data.arm" class="resource-label">{{localize 'ffrpg4e.core.arm'}}</label>
                   <div class="resource-content flexrow flex-center flex-between">
                     <input type="text" name="data.arm" value="{{data.arm}}" data-dtype="Number"/>
 
                   </div>
               </div>
               <div class="resource flex-group-center">
-                  <label for="data.marm" class="resource-label">MARM</label>
+                  <label for="data.marm" class="resource-label">{{localize 'ffrpg4e.core.marm'}}</label>
                   <div class="resource-content flexrow flex-center flex-between">
                     <input type="text" name="data.marm" value="{{data.marm}}" data-dtype="Number"/>
 
                   </div>
               </div>
               <div class="resource flex-group-center">
-                  <label for="data.initDice" class="resource-label">Initiative</label>
+                  <label for="data.initDice" class="resource-label">{{localize 'ffrpg4e.core.initiative'}}</label>
                   <div class="resource-content flexrow flex-center flex-between">
                     <input type="text" name="data.initDice" value="{{data.initDice}}" data-dtype="Number"/>
 
@@ -60,11 +60,11 @@
 
     {{!-- Sheet Tab Navigation --}}
     <nav class="sheet-tabs tabs" data-group="primary">
-        <a class="item" data-tab="stats">Stats</a>
-        <a class="item" data-tab="class">Class</a>
-        <a class="item" data-tab="skills">Skills</a>
-        <a class="item" data-tab="items">Items</a>
-        <a class="item" data-tab="description">Description</a>
+        <a class="item" data-tab="stats">{{localize "ffrpg4e.tabs.stats"}}</a>
+        <a class="item" data-tab="class">{{localize "ffrpg4e.tabs.class"}}</a>
+        <a class="item" data-tab="skills">{{localize "ffrpg4e.tabs.skills"}}</a>
+        <a class="item" data-tab="items">{{localize "ffrpg4e.tabs.items"}}</a>
+        <a class="item" data-tab="description">{{localize "ffrpg4e.tabs.description"}}</a>
     </nav>
 
     {{!-- Sheet Body --}}
@@ -75,22 +75,22 @@
           <div class = " grid grid-2col">
           <div>
             <input name = "data.expVal" type = "checkbox" {{checked data.expVal}}>
-            <label for="data.expVal">Calculate Using Exp</label>
+            <label for="data.expVal">{{localize "ffrpg4e.exp.calculate"}}</label>
           </div>
             <div class="resource-content flexrow flex-center flex-between">
-            <span>EXP Budget: </span><span>{{data.attributes.exp.spent}}</span> / <input type="text" name="data.attributes.exp.total" value="{{data.attributes.exp.total}}" data-dtype="Number"/> 
+            <span>{{localize "ffrpg4e.exp.budget"}}: </span><span>{{data.attributes.exp.spent}}</span> / <input type="text" name="data.attributes.exp.total" value="{{data.attributes.exp.total}}" data-dtype="Number"/> 
           </div>
         </div>
           <span>Level: {{data.attributes.level.value}}</span>
           <div class="abilities grid grid-4col">
             {{#each data.abilities as |ability key|}}
               <div class="ability flexcol flex-group-center">
-                <label><span class="resource-label ability-mod rollable" data-roll="d100+@abilities.{{key}}.value" data-label="{{key}}">{{key}}: Level {{numberFormat ability.level decimals=0}}</span></label>
-                <label for="data.abilities.{{key}}.exp" class="resource-label">EXP</label>
+                <label><span class="resource-label ability-mod rollable" data-roll="d100+@abilities.{{key}}.value" data-label="{{key}}">{{localize (concat "ffrpg4e.stats." key)}}: Level {{numberFormat ability.level decimals=0}}</span></label>
+                <label for="data.abilities.{{key}}.exp" class="resource-label">{{localize "ffrpg4e.exp.experience"}}</label>
                 <input type="text" name="data.abilities.{{key}}.exp" value="{{ability.exp}}" data-dtype="Number" min ="0"/>
-                <label for="data.abilities.{{key}}.value" class="resource-label">POINTS</label>
+                <label for="data.abilities.{{key}}.value" class="resource-label">{{localize "ffrpg4e.exp.points"}}</label>
                 <input type="text" name="data.abilities.{{key}}.value" value="{{ability.value}}" data-dtype="Number" min ="0"/>
-                <h3 class="">XP to Next Point: {{numberFormat ability.nextValue decimals=0}}<br> XP to Next Level: {{numberFormat ability.nextLevel decimals=0}}</h3>
+                <h3 class="">{{localize "ffrpg4e.exp.nextPoint"}}: {{numberFormat ability.nextValue decimals=0}}<br> {{localize "ffrpg4e.exp.nextLevel"}}: {{numberFormat ability.nextLevel decimals=0}}</h3>
               </div>
             {{/each}}
           </div>
@@ -98,21 +98,21 @@
         <div class="tab class" data-group="primary" data-tab="class">
           <div class="resources grid grid-2col">
               <div class="resource flex-group-center">
-                  <label for="data.attributes.job.main" class="resource-label">Main Job</label>
+                  <label for="data.attributes.job.main" class="resource-label">{{localize "ffrpg4e.class.mainJob"}}</label>
                   <div class="resource-content flexrow flex-center flex-between">
                     <input type="text" name="data.attributes.job.main" value="{{data.attributes.job.main}}"/>
                   </div>
-                  <label for="data.attributes.job.secondary" class="resource-label">Secondary Job</label>
+                  <label for="data.attributes.job.secondary" class="resource-label">{{localize "ffrpg4e.class.secondaryJob"}}</label>
                   <div class="resource-content flexrow flex-center flex-between">
                     <input type="text" name="data.attributes.job.secondary" value="{{data.attributes.job.secondary}}"/>
                   </div>
               </div>
               <div class="resource flex-group-center">
-                  <label for="data.attributes.job.hpMult" class="resource-label">HP Multiplier</label>
+                  <label for="data.attributes.job.hpMult" class="resource-label">{{localize "ffrpg4e.class.hpMult"}}</label>
                   <div class="resource-content flexrow flex-center flex-between">
                     <input type="text" name="data.attributes.job.hpMult" value="{{data.attributes.job.hpMult}}" data-dtype="Number"/>
                   </div>
-                  <label for="data.attributes.job.mpMult" class="resource-label">MP Multiplier</label>
+                  <label for="data.attributes.job.mpMult" class="resource-label">{{localize "ffrpg4e.class.mpMult"}}</label>
                   <div class="resource-content flexrow flex-center flex-between">
                     <input type="text" name="data.attributes.job.mpMult" value="{{data.attributes.job.mpMult}}" data-dtype="Number"/>
                   </div>
@@ -121,9 +121,9 @@
               <ol class="items-list">
                 <li class="item flexrow item-header">
                   <div class="item-image"></div>
-                  <div class="item-name">Name</div>
+                  <div class="item-name">{{localize "ffrpg4e.class.jobFeature"}}</div>
                   <div class="item-controls">
-                    <a class="item-control item-create" title="Create item" data-type="action"><i class="fas fa-plus"></i> Add item</a>
+                    <a class="item-control item-create" title="{{localize 'ffrpg4e.class.addFeature'}}" data-type="action"><i class="fas fa-plus"></i> {{localize "ffrpg4e.class.addFeature"}}</a>
                   </div>
                   
                 </li>
@@ -150,9 +150,9 @@
             <ol class="items-list">
                 <li class="item flexrow item-header">
                   <div class="item-image"></div>
-                  <div class="item-name">Name</div>
+                  <div class="item-name">{{localize "ffrpg4e.inventory.items"}}</div>
                   <div class="item-controls">
-                    <a class="item-control item-create" title="Create item" data-type="item"><i class="fas fa-plus"></i> Add item</a>
+                    <a class="item-control item-create" title="Create item" data-type="item"><i class="fas fa-plus"></i>{{localize "ffrpg4e.inventory.newItem"}}</a>
                   </div>
                   
                 </li>
@@ -172,9 +172,9 @@
             <ol class="items-list">
                 <li class="item flexrow item-header">
                   <div class="item-image"></div>
-                  <div class="item-name">Name</div>
+                  <div class="item-name">{{localize "ffrpg4e.inventory.weapons"}}</div>
                   <div class="item-controls">
-                    <a class="item-control item-create" title="Create item" data-type="weapon"><i class="fas fa-plus"></i> Add weap</a>
+                    <a class="item-control item-create" title="Create item" data-type="weapon"><i class="fas fa-plus"></i>{{localize "ffrpg4e.inventory.newWeapon"}}</a>
                   </div>
                   
                 </li>
@@ -194,10 +194,10 @@
             <ol class="items-list">
                 <li class="item flexrow item-header">
                   <div class="item-image"></div>
-                  <div class="item-name">Name</div>
+                  <div class="item-name">{{localize "ffrpg4e.inventory.armor"}}</div>
                 
                   <div class="item-controls">
-                    <a class="item-control item-create" title="Create item" data-type="armor"><i class="fas fa-plus"></i> Add armor</a>
+                    <a class="item-control item-create" title="Create item" data-type="armor"><i class="fas fa-plus"></i>{{localize "ffrpg4e.inventory.newArmor"}}</a>
                   </div>
                 </li>
             {{#each armor as |armor id|}}
@@ -219,7 +219,7 @@
           {{editor content=data.biography target="data.biography" button=true owner=owner editable=editable}}
         </div>
         <div class="tab skills" data-group="primary" data-tab="skills">
-          <div>Skills: {{data.attributes.skillPoints.totalSpent}}/{{data.attributes.skillPoints.budget}}</div>
+          <div>{{localize "ffrpg4e.tabs.skills"}}: {{data.attributes.skillPoints.totalSpent}}/{{data.attributes.skillPoints.budget}}</div>
           
             <div class = "grid grid-4col">
             {{#each data.skills as |list element|}}
@@ -240,7 +240,7 @@
             {{#each list as |value skill|}}
 
             <div class = "flexcol flex-group-center flex-between">
-              <label for="data.skills.{{element}}.{{skill}}" class="resource-label rollable" data-roll="{{value}}d100kh1+@abilities.{{element}}.value" data-label="{{skill}}">{{skill}}</label>
+              <label for="data.skills.{{element}}.{{skill}}" class="resource-label rollable" data-roll="{{value}}d100kh1+@abilities.{{element}}.value" data-label="{{skill}}">{{localize (concat "ffrpg4e.skill." skill)}}</label>
               <input type="text" name="data.skills.{{element}}.{{skill}}" value="{{value}}" data-dtype="Number" min ="1"/>
             </div>
             {{/each}}

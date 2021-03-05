@@ -21,7 +21,7 @@
             <h4 class="dice-total"{{#if isCrit}}style = "color:green"{{/if}}>{{total}}</h4>
             <h4 class="dice-total"{{#if isCrit}}style = "color:green"{{/if}}>DC {{difficulty}}: {{postDiff}}</h4>
             {{#if hasDamage}}
-            <div class="dice-formula">DAMAGE: {{damageTooltip}}</div>
+            <div class="dice-formula">{{localize "ffrpg4e.chat.damage"}}: {{damageTooltip}}</div>
             <h4 class="dice-total"{{#if isCrit}}style = "color:green"{{/if}}> {{damage}} {{damageType}} {{damageElement}}</h4>
             {{/if}}
         </div>

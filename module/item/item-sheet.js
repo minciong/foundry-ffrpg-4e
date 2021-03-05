@@ -31,7 +31,7 @@ export class FFRPGItemSheet extends ItemSheet {
   getData() {
     const data = super.getData();
     data.config = CONFIG.ffrpg4e;
-    console.log(data)
+    // console.log(data)
     return data;
   }
 
