@@ -185,6 +185,7 @@
 .ffrpg4e .sheet-body .tab,
 .ffrpg4e .sheet-body .tab .editor {
   height: 100%;
+  font-size: 10px;
 }
 
 .ffrpg4e .tox .tox-editor-container {
@@ -228,7 +229,7 @@
 }
 
 .ffrpg4e .items-list .item {
-  height: 30px;
+  /*height: 30px;*/
   line-height: 24px;
   padding: 3px 0;
   border-bottom: 1px solid #BBB;
@@ -259,7 +260,7 @@
 .ffrpg4e .items-list .item-controls {
   -webkit-box-flex: 0;
   -ms-flex: 0 0 86px;
-  flex: 0 0 86px;
+  /*flex: 0 0 86px;*/
   text-align: right;
 }
 .ffrpg .chat-card {

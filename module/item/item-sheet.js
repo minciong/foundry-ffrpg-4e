@@ -8,7 +8,7 @@ export class FFRPGItemSheet extends ItemSheet {
   static get defaultOptions() {
     return mergeObject(super.defaultOptions, {
       classes: ["ffrpg4e", "sheet", "item"],
-      // width: 520,
+      width: 700,
       height: 480,
       tabs: [{ navSelector: ".sheet-tabs", contentSelector: ".sheet-body", initial: "attributes" }]
     });

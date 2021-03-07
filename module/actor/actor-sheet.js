@@ -9,8 +9,8 @@ export class FFRPGActorSheet extends ActorSheet {
     return mergeObject(super.defaultOptions, {
       classes: ["ffrpg4e", "sheet", "actor"],
       template: "systems/ffrpg4e/templates/actor/actor-sheet.html",
-      width: 600,
-      height: 600,
+      width: 900,
+      height: 800,
       tabs: [{ navSelector: ".sheet-tabs", contentSelector: ".sheet-body", initial: "stats" }]
     });
   }
@@ -139,20 +139,21 @@ export class FFRPGActorSheet extends ActorSheet {
   }
   _equipArmor(armor){
     let actor = armor.actor;
-    actor.data.data.arm = armor.data.data.arm
-    actor.data.data.marm = armor.data.data.marm
+
     
+    const update = actor.update({"data.arm":armor.data.data.arm, "data.marm":armor.data.data.marm},{diff:false})
     this.form.elements["data.arm"].value=armor.data.data.arm
     this.form.elements["data.marm"].value=armor.data.data.marm
 
-    const update = actor.update({arm:armor.data.data.arm, marm:armor.data.data.marm},{diff:false})
   }
   _handleAction(action){
-    // let actor = action.actor;
-    // if((action.data.data.mpCost>0&&actor.data.data.mana.value>=action.data.data.mpCost)){
-    //     actor.data.data.mana.value-=action.data.data.mpCost
-    //     this.form.elements["data.mana.value"].value=actor.data.data.mana.value
-    //   }
+    let actor = action.actor;
+    if((action.data.data.mpCost>0&&actor.data.data.mana.value>=action.data.data.mpCost)){
+        let deltamp= actor.data.data.mana.value-action.data.data.mpCost
+        this.form.elements["data.mana.value"].value=deltamp
+        actor.update({mana:deltamp},{diff:false})
+        // actor.update()
+      }
         action.roll();
   }
   _onItemSummary(event) {
