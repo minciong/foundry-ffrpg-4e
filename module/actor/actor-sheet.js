@@ -151,7 +151,7 @@ export class FFRPGActorSheet extends ActorSheet {
     if((action.data.data.mpCost>0&&actor.data.data.mana.value>=action.data.data.mpCost)){
         let deltamp= actor.data.data.mana.value-action.data.data.mpCost
         this.form.elements["data.mana.value"].value=deltamp
-        actor.update({mana:deltamp},{diff:false})
+        actor.update({"data.mana.value":deltamp},{diff:false})
         // actor.update()
       }
         action.roll();
