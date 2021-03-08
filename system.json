@@ -4,7 +4,7 @@
   "description": "The Final Fantasy RPG 4e system for FoundryVTT!",
   "version": "1.0.0",
   "minimumCoreVersion": "0.5.5",
-  "compatibleCoreVersion": "0.5.5",
+  "compatibleCoreVersion": "0.7.9",
   "templateVersion": 2,
   "author": "Max I",
   "esmodules": ["module/ffrpg4e.js"],
