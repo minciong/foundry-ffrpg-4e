@@ -14,6 +14,7 @@
           "max": 5
         },
         "initDice":3,
+        "gil":200,
         "arm":0,
         "marm":0
       }

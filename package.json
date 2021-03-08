@@ -1,7 +1,7 @@
 {
   "name": "ffrpg4e",
   "version": "1.0.0",
-  "description": "CSS compiler for the Final Fantasy RPG 4e system",
+  "description": "CSS compiler for FFRPG4E",
   "scripts": {
     "build": "gulp",
     "compile": "gulp css",

@@ -123,7 +123,8 @@
 			"mp":"MP",
 			"arm":"ARM",
 			"marm":"MARM",
-			"initiative":"Initiative"
+			"initiative":"Initiative",
+			"gil":"Gil"
 		},
 		"chat":{
 			"damage":"Damage",
