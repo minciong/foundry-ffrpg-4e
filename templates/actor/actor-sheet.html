@@ -247,7 +247,7 @@
             {{#each list as |value skill|}}
 
             <div class = "flexcol flex-group-center flex-between">
-              <label for="data.skills.{{element}}.{{skill}}" class="resource-label rollable" data-roll="{{value}}d100kh1+@abilities.{{element}}.value" data-label="{{skill}}">{{localize (concat "ffrpg4e.skill." skill)}}</label>
+              <label for="data.skills.{{element}}.{{skill}}" class="resource-label rollable" data-roll="{{value}}d100kh1" data-label="{{skill}}">{{localize (concat "ffrpg4e.skill." skill)}}</label>
               <input type="text" name="data.skills.{{element}}.{{skill}}" value="{{value}}" data-dtype="Number" min ="1"/>
             </div>
             {{/each}}
