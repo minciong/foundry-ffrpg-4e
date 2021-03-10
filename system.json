@@ -24,6 +24,6 @@
   "secondaryTokenAttribute": "mana",
   "url": "https://github.com/minciong/foundry-ffrpg-4e",
   "manifest": "https://raw.githubusercontent.com/minciong/foundry-ffrpg-4e/master/system.json",
-  "download": "",
+  "download": "https://github.com/minciong/foundry-ffrpg-4e/archive/master.zip",
   "license": "LICENSE.txt"
 }
