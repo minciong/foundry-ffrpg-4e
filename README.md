@@ -14,3 +14,11 @@ Each character starts with three initiative dice, which are rolled together to f
 
 For more information, you can check out the resources provided in the link below.
 https://github.com/atmafox/FFRPG4e
+
+#Installation
+The manifest link to install this game is
+https://raw.githubusercontent.com/minciong/foundry-ffrpg-4e/master/system.json
+You can place this manifest URL in Foundry to enjoy FFRPG4e
+
+#Contribute
+This game is workable, but feel free to contribute to the development of this game by making pull requests towards this repo.
