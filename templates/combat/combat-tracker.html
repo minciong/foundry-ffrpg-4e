@@ -76,12 +76,12 @@
                 </div>
             </div>
 
-            {{#if this.hasResource}}
             <div class="token-resource">
                 <span class="resource">{{this.flags.initDice}}</span>
+            {{#if this.hasResource}}
                 <span class="resource">{{this.resource}}</span>
-            </div>
             {{/if}}
+            </div>
 
             <div class="token-initiative">
                 {{#if this.hasRolled}}

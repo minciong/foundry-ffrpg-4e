@@ -104,7 +104,7 @@ export class FFRPGItem extends Item {
     if ( abl ) {
       const ability = rollData.abilities[abl];
       rollData["mod"] = ability.value || 0;
-      rollData["dmg"] = ability.level*this.data.data.damageBase || 0;
+      rollData["dmg"] = ability.level*this.data.data.damageBase*this.data.data.actionModifier + this.data.data.bonusMod|| 0;
     }
 
     return rollData;
@@ -138,7 +138,7 @@ export class FFRPGItem extends Item {
     flavor += this.hasAttack?` (DC: ${itemData.difficulty})`:``;
     const isPrivate = options.isPrivate;
     let messageData={itemId: this.id,speaker: ChatMessage.getSpeaker({actor: this.actor}),flavor:flavor}; 
-    let damageTooltip=`${rollData.abilities[itemData.userStat].level} * ${itemData.damageBase} + ${(roll.results[0]%10==0)?10:roll.results[0]%10}`
+    let damageTooltip=`${rollData.abilities[itemData.userStat].level} * ${itemData.damageBase} * ${itemData.actionModifier} + ${(roll.results[0]%10==0)?10:roll.results[0]%10} + ${itemData.bonusMod}`
 
     const token = this.actor.token;
     const templateData = {
@@ -157,7 +157,8 @@ export class FFRPGItem extends Item {
       difficulty:itemData.difficulty,
       postDiff:roll.total-itemData.difficulty,
       hasAttack:this.hasAttack,
-      hasDamage:this.hasDamage
+      hasDamage:this.hasDamage,
+      speed:(itemData.actionSpeed>0)?itemData.actionSpeed:""
 
     };
 

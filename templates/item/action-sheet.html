@@ -36,7 +36,9 @@
                     <th>{{localize "ffrpg4e.action.userStat"}}</th>
                     <th>{{localize "ffrpg4e.action.targetStat"}}</th>
                     <th>{{localize "ffrpg4e.action.actionModifier"}}</th>
+                    <th>{{localize "ffrpg4e.action.bonusMod"}}</th>
                     <th>{{localize "ffrpg4e.action.difficulty"}}</th>
+                    <th>{{localize "ffrpg4e.action.hpCost"}}</th>
                     <th>{{localize "ffrpg4e.action.mpCost"}}</th>
                     <th>{{localize "ffrpg4e.action.actionSpeed"}}</th>
 
@@ -86,7 +88,13 @@
                         <input type="text" name="data.actionModifier" value = "{{data.actionModifier}}" data-dtype="Number">
                     </td>
                     <td>
+                        <input type="text" name="data.bonusMod" value = "{{data.bonusMod}}" data-dtype="Number">
+                    </td>
+                    <td>
                         <input type="text" name="data.difficulty" value = "{{data.difficulty}}" data-dtype="Number">
+                    </td>
+                    <td>
+                        <input type="text" name="data.hpCost" value = "{{data.hpCost}}" data-dtype="Number">
                     </td>
                     <td>
                         <input type="text" name="data.mpCost" value = "{{data.mpCost}}" data-dtype="Number">

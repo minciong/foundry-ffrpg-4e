@@ -38,8 +38,10 @@
 		    "targetStat": "Target Stat",
 		    "actionModifier": "Action Modifier",
 	    	"difficulty": "DC",
+	    	"hpCost":"HP Cost",
 	    	"mpCost":"MP Cost",
-		    "actionSpeed":"Action Speed"
+		    "actionSpeed":"Action Speed",
+		    "bonusMod":"Bonus Modifiers"
 		},
 		"speed":{
 			"quick":"Quick",

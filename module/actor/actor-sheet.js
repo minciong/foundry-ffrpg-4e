@@ -154,6 +154,12 @@ export class FFRPGActorSheet extends ActorSheet {
         actor.update({"data.mana.value":deltamp},{diff:false})
         // actor.update()
       }
+      if((action.data.data.hpCost>0&&actor.data.data.health.value>=action.data.data.hpCost)){
+        let deltahp= actor.data.data.health.value-action.data.data.hpCost
+        this.form.elements["data.health.value"].value=deltahp
+        actor.update({"data.health.value":deltahp},{diff:false})
+        // actor.update()
+      }
         action.roll();
   }
   _onItemSummary(event) {

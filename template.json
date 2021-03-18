@@ -157,6 +157,7 @@
       "userStat": "earth",
       "targetStat": "earth",
       "actionModifier": 1.0,
+      "bonusMod": 0,
       "difficulty": 0,
       "mpCost":0,
       "actionSpeed":0
