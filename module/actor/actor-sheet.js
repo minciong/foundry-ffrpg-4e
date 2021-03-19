@@ -139,26 +139,19 @@ export class FFRPGActorSheet extends ActorSheet {
   }
   _equipArmor(armor){
     let actor = armor.actor;
-
+    const update = actor.update({"data.arm":armor.data.data.arm, "data.marm":armor.data.data.marm})
     
-    const update = actor.update({"data.arm":armor.data.data.arm, "data.marm":armor.data.data.marm},{diff:false})
-    this.form.elements["data.arm"].value=armor.data.data.arm
-    this.form.elements["data.marm"].value=armor.data.data.marm
 
   }
   _handleAction(action){
     let actor = action.actor;
     if((action.data.data.mpCost>0&&actor.data.data.mana.value>=action.data.data.mpCost)){
         let deltamp= actor.data.data.mana.value-action.data.data.mpCost
-        this.form.elements["data.mana.value"].value=deltamp
-        actor.update({"data.mana.value":deltamp},{diff:false})
-        // actor.update()
+        actor.update({"data.mana.value":deltamp})
       }
       if((action.data.data.hpCost>0&&actor.data.data.health.value>=action.data.data.hpCost)){
         let deltahp= actor.data.data.health.value-action.data.data.hpCost
-        this.form.elements["data.health.value"].value=deltahp
-        actor.update({"data.health.value":deltahp},{diff:false})
-        // actor.update()
+        actor.update({"data.health.value":deltahp})
       }
         action.roll();
   }
