@@ -2,7 +2,7 @@
  * Extend the basic Item with some very simple modifications.
  * @extends {Item}
  */
-export class BoilerplateItem extends Item {
+export class ffrpg4eItem extends Item {
   /**
    * Augment the basic Item data model with additional dynamic data.
    */
@@ -10,6 +10,22 @@ export class BoilerplateItem extends Item {
     // As with the actor class, items are documents that can have their data
     // preparation methods overridden (such as prepareBaseData()).
     super.prepareData();
+    // Get the Item's data
+    const itemData = this.data;
+    const actorData = this.actor ? this.actor.data : {};
+    const data = itemData.data;
+    if(itemData.type=="action"){
+      if(data.actionSpeed==0){
+        data.speedName=CONFIG.ffrpg4e.speedTypes.quick
+      }
+      else if(data.actionSpeed>0&&data.actionSpeed<=10){
+        data.speedName=CONFIG.ffrpg4e.speedTypes.slow
+      }
+      else{
+       data.speedName=CONFIG.ffrpg4e.speedTypes.reaction
+      }
+
+    }
   }
 
   /**
@@ -24,7 +40,14 @@ export class BoilerplateItem extends Item {
 
     return rollData;
   }
+  get hasDamage(){
+    return this.data.data.damageBase>0 && this.data.data.damageBase!=null
 
+  }
+  get hasAttack(){
+    return this.data.data.difficulty>=0 && this.data.data.difficulty!=null
+
+  }
   /**
    * Handle clickable rolls.
    * @param {Event} event   The originating click event
@@ -53,7 +76,9 @@ export class BoilerplateItem extends Item {
       const rollData = this.getRollData();
 
       // Invoke the roll and submit it to chat.
-      const roll = new Roll(rollData.item.formula, rollData).roll();
+      const roll = new Roll(rollData.item.formula, rollData);
+      // If you need to store the value first, uncomment the next line.
+      // let result = await roll.roll({async: true});
       roll.toMessage({
         speaker: speaker,
         rollMode: rollMode,

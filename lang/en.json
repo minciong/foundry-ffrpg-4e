@@ -1,22 +1,148 @@
 {
-  "BOILERPLATE.AbilityStr": "Strength",
-  "BOILERPLATE.AbilityCon": "Constitution",
-  "BOILERPLATE.AbilityDex": "Dexterity",
-  "BOILERPLATE.AbilityInt": "Intelligence",
-  "BOILERPLATE.AbilityWis": "Wisdom",
-  "BOILERPLATE.AbilityCha": "Charisma",
+    "FFRPG4E":{
+      "stats":{
+        "earth":"Earth",
+        "air":"Air",
+        "fire":"Fire",
+        "water":"Water"
+      },
+      "element":{
+        "crush":"Crush",
+        "puncture":"Puncture",
+        "cut":"Cut",
+        "fire":"Fire",
+        "ice":"Ice",
+        "lightning":"Lightning",
+        "air":"Air",
+        "earth":"Earth",
+        "water":"Water",
+        "bio":"Bio",
+        "light":"Light",
+        "shadow":"Shadow",
+        "healing":"Healing"
+      },
+      "damage":{
+        "physical": "Physical",
+        "magical": "Magical"
+      },
+      "armor":{
+        "light":"Light Armor",
+        "medium":"Medium Armor",
+        "heavy":"Heavy Armor"
+      },
+      "action":{
+          "damageBase": "Damage Base",
+          "element" : "Element",
+          "damageType" : "Physical/Magical",
+          "userStat": "User Stat",
+          "targetStat": "Target Stat",
+          "actionModifier": "Action Modifier",
+          "difficulty": "DC",
+          "hpCost":"HP Cost",
+          "mpCost":"MP Cost",
+          "actionSpeed":"Action Speed",
+          "bonusMod":"Bonus Modifiers"
+      },
+      "speed":{
+        "quick":"Quick",
+        "slow": "Slow",
+        "reaction": "Reaction"
+      },
+      "skill":{
+        "strength": "Strength",
+        "climbing":"Climbing",
+        "swimming":"Swimming",
+        "intimidation":"Intimidation",
+        "tolerance":"Tolerance",
+        "jumping":"Jumping",
+        "fencing":"Fencing",
+        "running":"Running",
+        "stealth":"Stealth",
+        "piloting":"Piloting",
+        "riding":"Riding",
+        "thievery":"Thievery",
+        "acrobatics":"Acrobatic",
+        "marksmanship":"Marksmanship",
+        "infiltration":"Infiltration",
+        "perception":"Perception",
+        "medicine":"Medicine",
+        "survival":"Survival",
+        "technology":"Technology",
+        "wisdom":"Wisdom",
+        "spellcraft":"Spellcraft",
+        "willpower":"Willpower",
+        "bluff":"Bluff",
+        "animalHandling":"Animal Handling",
+        "charisma":"Charisma",
+        "performance":"Performance",
+        "magic":"Magic",
+        "spellResistance":"Magic Spell Resistance"
+      },
+      "tabs":{
+        "stats":"Stats",
+        "class":"Class",
+        "skills":"Skills",
+        "items":"Items",
+        "description":"Description"
+      },
+      "exp":{
+        "calculate":"Calculate Using Exp",
+        "budget":"EXP Budget",
+        "experience":"EXP",
+        "points":"Points",
+        "nextLevel":"EXP to next Level",
+        "nextPoint":"EXP to next Point"
 
-  "BOILERPLATE.AbilityStrAbbr": "str",
-  "BOILERPLATE.AbilityConAbbr": "con",
-  "BOILERPLATE.AbilityDexAbbr": "dex",
-  "BOILERPLATE.AbilityIntAbbr": "int",
-  "BOILERPLATE.AbilityWisAbbr": "wis",
-  "BOILERPLATE.AbilityChaAbbr": "cha",
+      },
+      "class":{
+        "mainJob":"Main Job",
+        "secondaryJob":"Secondary Job",
+        "hpMult":"HP Multiplier",
+        "mpMult":"MP Multiplier",
+        "jobFeature": "Job Feature",
+        "addFeature": "Add Feature"
 
-  "BOILERPLATE.EffectCreate": "Create Effect",
-  "BOILERPLATE.EffectToggle": "Toggle Effect",
-  "BOILERPLATE.EffectEdit": "Edit Effect",
-  "BOILERPLATE.EffectDelete": "Delete Effect",
+      },
+      "inventory":{
+        "items":"Items",
+        "newItem":"New Item",
+        "weapons":"Weapons",
+        "newWeapon":"New Weapon",
+        "armor":"Armor",
+        "newArmor":"New Armor"
+      },
+      "genItem":{
+        "quantity":"Quantity",
+        "gil":"Gil",
+        "description":"Description",
+        "attributes":"Attributes",
+        "armorType":"Armor Type",
+        "armor":"ARM",
+        "magicArmor":"MARM"
+      },
+      "core":{
+        "hp":"HP",
+        "mp":"MP",
+        "arm":"ARM",
+        "marm":"MARM",
+        "initiative":"Initiative",
+        "gil":"Gil"
+      },
+      "chat":{
+        "damage":"Damage",
+        "healing":"Healing",
+        "arm":"ARM",
+        "marm":"MARM"
+      }
+    },
 
-  "BOILERPLATE.Add": "Add"
+  "FFRPG4E.EffectCreate": "Create Effect",
+  "FFRPG4E.EffectToggle": "Toggle Effect",
+  "FFRPG4E.EffectEdit": "Edit Effect",
+  "FFRPG4E.EffectDelete": "Delete Effect",
+  "FFRPG4E.Add": "Add"
+
+
+
+  
 }

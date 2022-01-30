@@ -23,11 +23,11 @@
         </div>
 
         <div class="resource flex-group-center">
-          <label for="data.power.value" class="resource-label">Power</label>
+          <label for="data.mana.value" class="resource-label">Mana</label>
           <div class="resource-content flexrow flex-center flex-between">
-          <input type="text" name="data.power.value" value="{{data.power.value}}" data-dtype="Number"/>
+          <input type="text" name="data.mana.value" value="{{data.mana.value}}" data-dtype="Number"/>
           <span> / </span>
-          <input type="text" name="data.power.max" value="{{data.power.max}}" data-dtype="Number"/>
+          <input type="text" name="data.mana.max" value="{{data.mana.max}}" data-dtype="Number"/>
           </div>
         </div>
 
@@ -45,15 +45,41 @@
   {{!-- Sheet Tab Navigation --}}
   <nav class="sheet-tabs tabs" data-group="primary">
     {{!-- Default tab is specified in actor-sheet.mjs --}}
+    <a class="item" data-tab="stats">Stats</a>
     <a class="item" data-tab="features">Features</a>
-    <a class="item" data-tab="description">Description</a>
+    <a class="item" data-tab="skills">Skills</a>
     <a class="item" data-tab="items">Items</a>
     <a class="item" data-tab="spells">Spells</a>
     <a class="item" data-tab="effects">Effects</a>
+    <a class="item" data-tab="description">Description</a>
   </nav>
 
   {{!-- Sheet Body --}}
   <section class="sheet-body">
+    <div class="tab biography" data-group="primary" data-tab="stats">
+          <div class = " grid grid-2col">
+          <div>
+            <input name = "data.expVal" type = "checkbox" {{checked data.expVal}}>
+            <label for="data.expVal">{{localize "FFRPG4E.exp.calculate"}}</label>
+          </div>
+            <div class="resource-content flexrow flex-center flex-between">
+            <span>{{localize "FFRPG4E.exp.budget"}}: </span><span>{{data.attributes.exp.spent}}</span> / <input type="text" name="data.attributes.exp.total" value="{{data.attributes.exp.total}}" data-dtype="Number"/> 
+          </div>
+        </div>
+          <span>Level: {{data.attributes.level.value}}</span>
+          <div class="abilities grid grid-4col">
+            {{#each data.abilities as |ability key|}}
+              <div class="ability flexcol flex-group-center">
+                <label><span class="resource-label ability-mod rollable" data-roll="d100+@abilities.{{key}}.value" data-label="{{key}}">{{localize (concat "FFRPG4E.stats." key)}}: Level {{numberFormat ability.level decimals=0}}</span></label>
+                <label for="data.abilities.{{key}}.exp" class="resource-label">{{localize "FFRPG4E.exp.experience"}}</label>
+                <input type="text" name="data.abilities.{{key}}.exp" value="{{ability.exp}}" data-dtype="Number" min ="0"/>
+                <label for="data.abilities.{{key}}.value" class="resource-label">{{localize "FFRPG4E.exp.points"}}</label>
+                <input type="text" name="data.abilities.{{key}}.value" value="{{ability.value}}" data-dtype="Number" min ="0"/>
+                <h3 class="">{{localize "FFRPG4E.exp.nextPoint"}}: {{numberFormat ability.nextValue decimals=0}}<br> {{localize "FFRPG4E.exp.nextLevel"}}: {{numberFormat ability.nextLevel decimals=0}}</h3>
+              </div>
+            {{/each}}
+          </div>
+        </div>
 
     {{!-- Owned Features Tab --}}
     <div class="tab features" data-group="primary" data-tab="features">
@@ -63,21 +89,13 @@
           {{!-- The grid classes are defined in scss/global/_grid.scss. To use,
           use both the "grid" and "grid-Ncol" class where "N" can be any number
           from 1 to 12 and will create that number of columns.  --}}
-          <div class="abilities flexcol">
-            {{#each data.abilities as |ability key|}}
-            <div class="ability flexrow flex-group-center">
-              <label for="data.abilities.{{key}}.value" class="resource-label rollable flexlarge align-left" data-roll="d20+@abilities.{{key}}.mod" data-label="{{ability.label}}">{{ability.label}}</label>
-              <input type="text" name="data.abilities.{{key}}.value" value="{{ability.value}}" data-dtype="Number"/>
-              <span class="ability-mod rollable" data-roll="d20+@abilities.{{key}}.mod" data-label="{{ability.label}}">{{numberFormat ability.mod decimals=0 sign=true}}</span>
-            </div>
-            {{/each}}
-          </div>
+          {{> "systems/ffrpg4e/templates/actor/parts/actor-jobs.html"}}
         </aside>
 
         {{!-- For the main features list, span the right two columns --}}
         <section class="main grid-span-2">
           {{!-- This is a Handlebars partial. They're stored in the `/parts` folder next to this sheet, and defined in module/helpers/templates.mjs --}}
-          {{> "systems/boilerplate/templates/actor/parts/actor-features.html"}}
+          {{> "systems/ffrpg4e/templates/actor/parts/actor-features.html"}}
         </section>
 
       </section>
@@ -88,20 +106,22 @@
       {{!-- If you want TinyMCE editors to output inline rolls when rendered, you need to pass the actor's roll data to the rollData property. --}}
       {{editor content=data.biography target="data.biography" rollData=rollData button=true owner=owner editable=editable}}
     </div>
-
+    <div class="tab skills" data-group="primary" data-tab="skills">
+      {{> "systems/ffrpg4e/templates/actor/parts/actor-skills.html"}}
+    </div>
     {{!-- Owned Items Tab --}}
     <div class="tab items" data-group="primary" data-tab="items">
-       {{> "systems/boilerplate/templates/actor/parts/actor-items.html"}}
+       {{> "systems/ffrpg4e/templates/actor/parts/actor-items.html"}}
     </div>
 
     {{!-- Owned Spells Tab --}}
     <div class="tab spells" data-group="primary" data-tab="spells">
-      {{> "systems/boilerplate/templates/actor/parts/actor-spells.html"}}
+      {{> "systems/ffrpg4e/templates/actor/parts/actor-spells.html"}}
     </div>
 
     {{!-- Active Effects Tab --}}
     <div class="tab effects flexcol" data-group="primary" data-tab="effects">
-      {{> "systems/boilerplate/templates/actor/parts/actor-effects.html"}}
+      {{> "systems/ffrpg4e/templates/actor/parts/actor-effects.html"}}
     </div>
 
   </section>

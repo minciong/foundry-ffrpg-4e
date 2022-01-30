@@ -1,6 +1,6 @@
 {
   "Actor": {
-    "types": ["character", "npc"],
+    "types": ["character"],
     "templates": {
       "base": {
         "health": {
@@ -8,66 +8,171 @@
           "min": 0,
           "max": 10
         },
-        "power": {
+        "mana": {
           "value": 5,
           "min": 0,
           "max": 5
         },
-        "biography": ""
+        "initDice":3,
+        "gil":200,
+        "arm":0,
+        "marm":0
       }
     },
     "character": {
       "templates": ["base"],
+      "biography": "",
+      "expVal":false,
       "attributes": {
+        "player":"",
+        "character":"",
         "level": {
-          "value": 1
+          "value": 0
+        },
+        "skillPoints":{
+          "budget":0,
+          "earthBudget":0,
+          "airBudget":0,
+          "fireBudget":0,
+          "waterBudget":0,
+          "earthSpent":0,
+          "airSpent":0,
+          "fireSpent":0,
+          "waterSpent":0,
+          "totalSpent":0
+        },
+        "exp": {
+          "spent":0,
+          "total":200
+        },
+        "job":{
+          "main": "",
+          "secondary": "",
+          "armor":[],
+          "weapons":[],
+          "hpMult":1,
+          "mpMult":1
         }
       },
       "abilities": {
-        "str": {
-          "value": 10
+        "earth": {
+          "exp": 0,
+          "level": 0,
+          "value": 0,
+          "nextLevel":0,
+          "nextValue":0
         },
-        "dex": {
-          "value": 10
+        "air": {
+          "exp": 0,
+          "level": 0,
+          "value": 0,
+          "nextLevel":0,
+          "nextValue":0
         },
-        "con": {
-          "value": 10
+        "fire": {
+          "exp": 0,
+          "level": 0,
+          "value": 0,
+          "nextLevel":0,
+          "nextValue":0
         },
-        "int": {
-          "value": 10
-        },
-        "wis": {
-          "value": 10
-        },
-        "cha": {
-          "value": 10
+        "water": {
+          "exp": 0,
+          "level": 0,
+          "value": 0,
+          "nextLevel":0,
+          "nextValue":0
         }
+      },
+      "skills":{
+          "earth":{
+              "strength":1, 
+              "climbing":1, 
+              "swimming":1, 
+              "intimidation":1, 
+              "tolerance":1, 
+              "jumping":1,
+              "fencing":1
+            },
+        "air":{
+            "running":1,
+            "stealth":1,
+            "piloting":1,
+            "riding":1,
+            "thievery":1,
+            "acrobatics":1,
+            "marksmanship":1
+          },
+        "fire":{
+            "infiltration":1,
+            "perception":1,
+            "medicine":1,
+            "survival":1,
+            "technology":1,
+            "wisdom":1,
+             "spellcraft":1
+          },
+          "water":{
+            "willpower":1,
+            "bluff":1,
+            "animalHandling":1,
+            "charisma":1,
+            "performance":1,
+            "magic":1,
+            "spellResistance":1
+          }
+
       }
-    },
-    "npc": {
-      "templates": ["base"],
-      "cr": 0
     }
   },
   "Item": {
-    "types": ["item", "feature", "spell"],
+    "types": [
+      "armor",
+      "weapon", 
+      "item",
+      "action"
+    ],
     "templates": {
       "base": {
+        "levelReq":1,
+        "cost":0,
         "description": ""
       }
     },
+    "weapon":{
+      "templates": ["base"],
+      "damageBase": 0,
+      "element" : "crush",
+      "damageType" : "physical",
+      "userStat": "earth",
+      "targetStat": "earth",
+      "actionModifier": 1.0,
+      "bonusMod": 0,
+      "difficulty": 0
+     },
+     "action":{
+      "templates": ["base"],
+      "damageBase": 0,
+      "element" : "crush",
+      "damageType" : "physical",
+      "userStat": "earth",
+      "targetStat": "earth",
+      "actionModifier": 1.0,
+      "bonusMod": 0,
+      "difficulty": 0,
+      "hpCost":0,
+      "mpCost":0,
+      "actionSpeed":0
+     },
+     "armor":{
+       "type":"light",
+       "arm":0,
+       "marm":0
+     },
     "item": {
       "templates": ["base"],
       "quantity": 1,
-      "weight": 0,
-      "formula": "d20 + @str.mod + ceil(@lvl / 2)"
-    },
-    "feature": {
-      "templates": ["base"]
-    },
-    "spell": {
-      "templates": ["base"],
-      "spellLevel": 1
+      "weight": 0
     }
   }
 }

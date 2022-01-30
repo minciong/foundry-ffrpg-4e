@@ -1,0 +1,68 @@
+<form class="{{cssClass}}" autocomplete="off">
+    <header class="sheet-header">
+        <img class="profile-img" src="{{item.img}}" data-edit="img" title="{{item.name}}"/>
+        <div class="header-fields">
+            <h1 class="charname"><input name="name" type="text" value="{{item.name}}" placeholder="Name"/></h1>
+            <div class="grid grid-2col">
+              <div class="resource">
+                <label class="resource-label">{{localize "FFRPG4E.genItem.quantity"}}</label>
+                  <input type="text" name="data.quantity" value="{{data.quantity}}" data-dtype="Number"/>
+              </div>
+              <div class="resource">
+                <label class="resource-label">{{localize "FFRPG4E.genItem.gil"}}</label>
+                  <input type="text" name="data.gil" value="{{data.gil}}" data-dtype="Number"/>
+              </div>
+            </div>
+        </div>
+    </header>
+
+    {{!-- Sheet Tab Navigation --}}
+    <nav class="sheet-tabs tabs" data-group="primary">
+        <a class="item" data-tab="description">{{localize "FFRPG4E.genItem.description"}}</a>
+        <a class="item" data-tab="attributes">{{localize "FFRPG4E.genItem.attributes"}}</a>
+    </nav>
+
+    {{!-- Sheet Body --}}
+    <section class="sheet-body">
+
+        {{!-- Attributes Tab --}}
+        <div class="tab attributes" data-group="primary" data-tab="attributes">
+            {{!-- As you add new fields, add them in here! --}}
+            <table>
+                <tr>
+                    <th>{{localize "FFRPG4E.genItem.armorType"}}</th>
+                    <th>{{localize "FFRPG4E.genItem.armor"}}</th>
+                    <th>{{localize "FFRPG4E.genItem.magicArmor"}}</th>
+                    
+
+                </tr>
+                <tr>
+                    
+                    <td>
+                        <select name = "data.type">
+                            {{#select data.type}}
+                            {{#each config.armorTypes as |name type|}}
+                             <option value="{{type}}">{{localize name}}</option>
+                            {{/each}}
+                            {{/select}}
+                            
+                        </select>
+                    </td>
+                    <td>
+                        <input type="text" name="data.arm" value = "{{data.arm}}" data-dtype="Number">
+                    </td>
+                    <td>
+                        <input type="text" name="data.marm" value = "{{data.marm}}" data-dtype="Number">
+                    </td>
+
+
+                </tr>
+            </table>
+        </div>
+
+        {{!-- Description Tab --}}
+        <div class="tab" data-group="primary" data-tab="description">
+            {{editor content=data.description target="data.description" button=true owner=owner editable=editable}}
+        </div>
+    </section>
+</form>

@@ -1,0 +1,117 @@
+<form class="{{cssClass}}" autocomplete="off">
+    <header class="sheet-header">
+        <img class="profile-img" src="{{item.img}}" data-edit="img" title="{{item.name}}"/>
+        <div class="header-fields">
+            <h1 class="charname"><input name="name" type="text" value="{{item.name}}" placeholder="Name"/></h1>
+            <div class="grid grid-2col">
+              <div class="resource">
+                <label class="resource-label">{{localize "FFRPG4E.genItem.quantity"}}</label>
+                  <input type="text" name="data.quantity" value="{{data.quantity}}" data-dtype="Number"/>
+              </div>
+              <div class="resource">
+                <label class="resource-label">{{localize "FFRPG4E.genItem.gil"}}</label>
+                  <input type="text" name="data.gil" value="{{data.gil}}" data-dtype="Number"/>
+              </div>
+            </div>
+        </div>
+    </header>
+
+    {{!-- Sheet Tab Navigation --}}
+    <nav class="sheet-tabs tabs" data-group="primary">
+        <a class="item" data-tab="attributes">{{localize "FFRPG4E.genItem.attributes"}}</a>
+        <a class="item" data-tab="description">{{localize "FFRPG4E.genItem.description"}}</a>
+    </nav>
+
+    {{!-- Sheet Body --}}
+    <section class="sheet-body">
+
+        {{!-- Attributes Tab --}}
+        <div class="tab attributes" data-group="primary" data-tab="attributes">
+            {{!-- As you add new fields, add them in here! --}}
+            <table>
+                <tr>
+                    <th>{{localize "FFRPG4E.action.damageBase"}}</th>
+                    <th>{{localize "FFRPG4E.action.element"}}</th>
+                    <th>{{localize "FFRPG4E.action.damageType"}}</th>
+                    <th>{{localize "FFRPG4E.action.userStat"}}</th>
+                    <th>{{localize "FFRPG4E.action.targetStat"}}</th>
+                    <th>{{localize "FFRPG4E.action.actionModifier"}}</th>
+                    <th>{{localize "FFRPG4E.action.bonusMod"}}</th>
+                    <th>{{localize "FFRPG4E.action.difficulty"}}</th>
+                    <th>{{localize "FFRPG4E.action.hpCost"}}</th>
+                    <th>{{localize "FFRPG4E.action.mpCost"}}</th>
+                    <th>{{localize "FFRPG4E.action.actionSpeed"}}</th>
+
+                </tr>
+                <tr>
+                    <td>
+                        <input type="text" name="data.damageBase" value = "{{data.damageBase}}" data-dtype="Number">
+                    </td>
+                    <td>
+                        <select name = "data.element">
+                            {{#select data.element}}
+                            {{#each config.elementTypes as |name type|}}
+                            <option value="{{type}}">{{localize name}}</option>
+                            {{/each}}
+                            {{/select}}
+                        </select>
+                    </td>
+                    <td>
+
+                        <select name = "data.damageType">
+                            {{#select data.damageType}}
+                            {{#each config.damageTypes as |name type|}}
+                            <option value="{{type}}">{{localize name}}</option>
+                            {{/each}}
+                            {{/select}}
+                        </select>
+                    </td>
+                    <td>
+                        <select name = "data.userStat">
+                            {{#select data.userStat}}
+                            {{#each config.statTypes as |name type|}}
+                            <option value="{{type}}">{{localize name}}</option>
+                            {{/each}}
+                            {{/select}}
+                        </select>
+                    </td>
+                    <td>
+                        <select name = "data.targetStat">
+                            {{#select data.targetStat}}
+                            {{#each config.statTypes as |name type|}}
+                            <option value="{{type}}">{{localize name}}</option>
+                            {{/each}}
+                            {{/select}}
+                        </select>
+                    </td>
+                    <td>
+                        <input type="text" name="data.actionModifier" value = "{{data.actionModifier}}" data-dtype="Number">
+                    </td>
+                    <td>
+                        <input type="text" name="data.bonusMod" value = "{{data.bonusMod}}" data-dtype="Number">
+                    </td>
+                    <td>
+                        <input type="text" name="data.difficulty" value = "{{data.difficulty}}" data-dtype="Number">
+                    </td>
+                    <td>
+                        <input type="text" name="data.hpCost" value = "{{data.hpCost}}" data-dtype="Number">
+                    </td>
+                    <td>
+                        <input type="text" name="data.mpCost" value = "{{data.mpCost}}" data-dtype="Number">
+                    </td>
+                    <td>
+                        <input type="text" name="data.actionSpeed" value = "{{data.actionSpeed}}" data-dtype="Number">
+                        {{localize data.speedName}}
+                    </td>
+
+
+                </tr>
+            </table>
+        </div>
+
+        {{!-- Description Tab --}}
+        <div class="tab" data-group="primary" data-tab="description">
+            {{editor content=data.description target="data.description" button=true owner=owner editable=editable}}
+        </div>
+    </section>
+</form>
