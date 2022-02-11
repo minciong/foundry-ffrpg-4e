@@ -19,8 +19,8 @@
       const roll = combatant.getInitiativeRoll(formula);
       await roll.evaluate({async: true});
       const iDice=roll.dice[0].results.map(x=>x.result).sort(function(a, b){return a-b})
-      updates.push({_id: id, initiative: roll.total,initDice:iDice,flags:{initDice:iDice}});
-      // updates.push({_id: id, initiative: roll.total});
+      updates.push({_id: id, initiative: roll.total,flags:{initDice:iDice}});
+      updates.push({_id: id, initiative: roll.total});
 
       // Construct chat message data
       let messageData = foundry.utils.mergeObject({
@@ -75,7 +75,7 @@ export const nextTurn=async function () {
     while(iDice[0]==phase)iDice.shift();
     let init=(iDice.length>0)?iDice.reduce((a, c) => a + c)+(currentTurn.initiative*1000)%1000/1000:0;
     await this.setInitiative(currentTurn.id,init)
-    await this.updateEmbeddedDocuments("Combatant", [{_id: currentTurn.id, initiative: init,initDice:iDice,flags:{initDice:iDice}}]);
+    await this.updateEmbeddedDocuments("Combatant", [{_id: currentTurn.id, initiative: init,flags:{initDice:iDice}}]);
     // Determine the next turn number
     let next = null;
     if ( skip ) {

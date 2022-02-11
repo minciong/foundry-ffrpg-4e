@@ -232,7 +232,8 @@ export class FFCombatTracker extends SidebarTab {
     combatants.click(this._onCombatantMouseDown.bind(this));
 
     // Context on right-click
-    if ( game.user.isGM ) this._contextMenu(html);
+    // if ( game.user.isGM ) this._contextMenu(html);
+    this._contextMenu(html);
 
     // Intersection Observer for Combatant avatars
     const observer = new IntersectionObserver(this._onLazyLoadImage.bind(this), { root: tracker[0] });
@@ -494,6 +495,7 @@ export class FFCombatTracker extends SidebarTab {
    */
   _onConfigureCombatant(li) {
     const combatant = this.viewed.combatants.get(li.data('combatant-id'));
+    console.log(combatant)
     new FFCombatantConfig(combatant, {
       top: Math.min(li[0].offsetTop, window.innerHeight - 350),
       left: window.innerWidth - 720,

@@ -1,5 +1,6 @@
 <form>
-
+    oogabooga
+    {{#if user.isGM}}
     <div class="form-group">
         <label>{{ localize "COMBAT.CombatantActor" }}</label>
         <div class="form-fields">
@@ -28,7 +29,7 @@
             <input class="image" type="text" name="img" placeholder="path/image.png" value="{{data.img}}"/>
         </div>
     </div>
-
+    {{/if}}
     <div class="form-group">
         <label>{{ localize "COMBAT.CombatantInitiative" }}</label>
         <div class="form-fields">
@@ -38,7 +39,7 @@
             <input type="text" name="initDice" value="{{ data.flags.initDice }}" step="any"/>
         </div>
     </div>
-
+{{#if user.isGM}}
     <div class="form-group">
         <label>{{localize "COMBAT.CombatantStatus"}}</label>
         <div class="form-fields">
@@ -52,7 +53,7 @@
             </label>
         </div>
     </div>
-
+{{/if}}
     <footer>
         <button type="submit" title="{{ title }}">
             <i class="fas fa-save"></i> {{ title }}
