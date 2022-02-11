@@ -16,18 +16,31 @@ export class ffrpg4eItem extends Item {
     const data = itemData.data;
     if(itemData.type=="action"){
       if(data.actionSpeed==0){
-        data.speedName=CONFIG.ffrpg4e.speedTypes.quick
+        data.speedName=CONFIG.FFRPG4E.speedTypes.quick
       }
       else if(data.actionSpeed>0&&data.actionSpeed<=10){
-        data.speedName=CONFIG.ffrpg4e.speedTypes.slow
+        data.speedName=CONFIG.FFRPG4E.speedTypes.slow
       }
       else{
-       data.speedName=CONFIG.ffrpg4e.speedTypes.reaction
+       data.speedName=CONFIG.FFRPG4E.speedTypes.reaction
       }
 
     }
   }
+getChatData(htmlOptions={}) {
+    const data = duplicate(this.data.data);
+    const labels = this.labels;
 
+    // Rich text description
+    data.description = data.description?TextEditor.enrichHTML(data.description, htmlOptions):'';
+
+    // Item type specific properties
+    const props = [];
+    const fn = this[`_${this.data.type}ChatData`];
+    if ( fn ) fn.bind(this)(data, labels, props);
+    data.properties = props.filter(p => !!p);
+    return data;
+  }
   /**
    * Prepare a data object which is passed to any Roll formulas which are created related to this Item
    * @private
@@ -37,7 +50,12 @@ export class ffrpg4eItem extends Item {
     if ( !this.actor ) return null;
     const rollData = this.actor.getRollData();
     rollData.item = foundry.utils.deepClone(this.data.data);
-
+    const abl = this.data.data.userStat;
+    if ( abl ) {
+      const ability = rollData.abilities[abl];
+      rollData["mod"] = ability.value || 0;
+      rollData["dmg"] = ability.level*this.data.data.damageBase*this.data.data.actionModifier + this.data.data.bonusMod|| 0;
+    }
     return rollData;
   }
   get hasDamage(){
@@ -54,7 +72,26 @@ export class ffrpg4eItem extends Item {
    * @private
    */
   async roll() {
+    if(this.hasAttack||this.hasDamage){
+      this.rollAttack();
+      return
+    }
     const item = this.data;
+
+    // Basic template rendering data
+    const token = this.actor.token;
+    const templateData = {
+      actor: this.actor,
+      tokenId: token ? `${token.scene.id}.${token.id}` : null,
+      item: this.data,
+      // data: this.getChatData()
+    };
+
+    // Render the chat card template
+    const templateType = this.data.type//["tool"].includes(this.data.type) ? this.data.type : "item";
+    const template = `systems/ffrpg4e/templates/chat/${templateType}-card.html`;
+    const html = await renderTemplate(template, templateData);
+
 
     // Initialize chat data.
     const speaker = ChatMessage.getSpeaker({ actor: this.actor });
@@ -86,5 +123,88 @@ export class ffrpg4eItem extends Item {
       });
       return roll;
     }
+  }
+  async rollAttack({rollMode=null}={},options={}) {
+    const itemData = this.data.data;
+    const actorData = this.actor.data.data;
+    // if ( !this.data.data.damageBase ) {
+    //   this.roll();
+    //   throw new Error("You may not place an Attack Roll with this Item.");
+    //   return;
+    // }
+    let title = `${this.name}`;
+    const rollData = this.getRollData();
+
+    // Define Roll bonuses
+    const parts = [`@mod`];
+
+   
+
+   
+    let formula = `1d100`;
+    parts.unshift(formula);
+    let roll = new Roll(parts.join(" + "),rollData);
+    roll.evaluate({async:true})
+
+    let d100=roll.dice[0].results[0].result;
+    let crit =(d100%10==Math.floor(d100/10)%10)
+    rollData["dmg"]+=(d100%10==0)?10:d100%10;
+    const messageOptions = {rollMode: rollMode || game.settings.get("core", "rollMode")};
+    let localUser = game.i18n.localize(`FFRPG4E.stats.${itemData.userStat}`)
+    let localTarget = game.i18n.localize(`FFRPG4E.stats.${itemData.targetStat}`)
+    let flavor = `${this.name} - ${localUser} vs ${localTarget}`;
+    flavor += this.hasAttack?` (DC: ${itemData.difficulty})`:``;
+    const isPrivate = options.isPrivate;
+    let messageData={itemId: this.id,speaker: ChatMessage.getSpeaker({actor: this.actor}),flavor:flavor}; 
+    let damageTooltip=`${rollData.abilities[itemData.userStat].level} * ${itemData.damageBase} * ${itemData.actionModifier} + ${(d100%10==0)?10:d100%10} + ${itemData.bonusMod}`
+
+    const token = this.actor.token;
+    const templateData = {
+      actor: this.actor,
+      tokenId: token ? `${token.scene.id}.${token.id}` : null,
+      item: this.data,
+      data: this.getChatData(),
+      tooltip: isPrivate ? "" : await roll.getTooltip(),
+      damageTooltip: damageTooltip,
+      total: isPrivate ? "?" : Math.round(roll.total * 100) / 100,
+      damage:rollData["dmg"],
+      damageElement: game.i18n.localize(`FFRPG4E.element.${itemData.element}`),
+      damageType: game.i18n.localize(`FFRPG4E.damage.${itemData.damageType}`),
+      formula:roll.formula,
+      isCrit:crit,
+      difficulty:itemData.difficulty,
+      postDiff:roll.total-itemData.difficulty,
+      hasAttack:this.hasAttack,
+      hasDamage:this.hasDamage,
+      speed:(itemData.actionSpeed>0)?"("+itemData.actionSpeed+")":""
+
+    };
+
+    // Render the chat card template
+    const templateType = this.data.type//["tool"].includes(this.data.type) ? this.data.type : "item";
+    const template = `systems/ffrpg4e/templates/chat/${templateType}-card.html`;
+    const html = await renderTemplate(template, templateData);
+    const speaker = ChatMessage.getSpeaker({ actor: this.actor });
+    
+    // Basic chat message data
+    const chatData = {
+      user: game.user.id,
+      type: CONST.CHAT_MESSAGE_TYPES.ROLL,
+      content: html,
+      roll:roll,
+      flavor: flavor,
+      speaker: speaker,
+      flags: {"core.canPopout": true}
+    };
+    // Toggle default roll mode
+    rollMode = rollMode || game.settings.get("core", "rollMode")
+    // if ( ["gmroll", "blindroll"].includes(rollMode) ) chatData["whisper"] = ChatMessage.getWhisperRecipients("GM");
+    // if ( rollMode === "blindroll" ) chatData["blind"] = true;
+    await ChatMessage.applyRollMode(chatData, rollMode)
+
+    // Create the chat message
+    await ChatMessage.create(chatData);
+    // await roll.toMessage(messageData);
+    // return roll;
   }
 }

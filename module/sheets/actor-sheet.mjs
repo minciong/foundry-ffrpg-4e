@@ -51,7 +51,8 @@ export class ffrpg4eActorSheet extends ActorSheet {
     // Prepare active effects
     context.effects = prepareActiveEffectCategories(this.actor.effects);
     
-
+    context.config = CONFIG.FFRPG4E;
+    context.dtypes = ["String","Number", "Boolean"];
     return context;
   }
 
@@ -75,7 +76,9 @@ export class ffrpg4eActorSheet extends ActorSheet {
   _prepareItems(context) {
     // Initialize containers.
     const gear = [];
-    const features = [];
+    const actions = [];
+    const weapons = [];
+    const armor = [];
     const spells = {
       0: [],
       1: [],
@@ -97,8 +100,16 @@ export class ffrpg4eActorSheet extends ActorSheet {
         gear.push(i);
       }
       // Append to features.
-      else if (i.type === 'feature') {
-        features.push(i);
+      else if (i.type === 'action') {
+        actions.push(i);
+      }
+      // Append to features.
+      else if (i.type === 'weapon') {
+        weapons.push(i);
+      }
+      // Append to features.
+      else if (i.type === 'armor') {
+        armor.push(i);
       }
       // Append to spells.
       else if (i.type === 'spell') {
@@ -107,11 +118,16 @@ export class ffrpg4eActorSheet extends ActorSheet {
         }
       }
     }
-
     // Assign and return
     context.gear = gear;
-    context.features = features;
+    context.actions = actions;
     context.spells = spells;
+    context.weapons = weapons;
+    context.armor = armor;
+    context.actions.sort((a, b) => (a.sort || 0) - (b.sort || 0));
+    context.gear.sort((a, b) => (a.sort || 0) - (b.sort || 0));
+    context.weapons.sort((a, b) => (a.sort || 0) - (b.sort || 0));
+    context.armor.sort((a, b) => (a.sort || 0) - (b.sort || 0));
    }
 
   /* -------------------------------------------- */

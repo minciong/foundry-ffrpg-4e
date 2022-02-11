@@ -8,6 +8,10 @@ import { ffrpg4eItemSheet } from "./sheets/item-sheet.mjs";
 import { preloadHandlebarsTemplates } from "./helpers/templates.mjs";
 import { FFRPG4E } from "./helpers/config.mjs";
 
+import { FFCombatTracker } from "./combat/combat-tracker.js";
+import { FFCombatTrackerConfig } from "./combat/combat-tracker-config.js";
+import * as FFCombat from "./combat/combat.js";
+// import * as FFCombatant from "./combat/combatant.js";
 /* -------------------------------------------- */
 /*  Init Hook                                   */
 /* -------------------------------------------- */
@@ -33,7 +37,11 @@ Hooks.once('init', async function() {
     formula: "3d10",
     decimals: 3
   };
-
+  Combat.prototype.rollInitiative = FFCombat.rollInitiative;
+  Combat.prototype.nextTurn = FFCombat.nextTurn;
+  Combatant.prototype._getInitiativeFormula = FFCombat._getInitiativeFormula;
+  CONFIG.ui.combat=FFCombatTracker;
+  Combat.CONFIG_SETTING = FFCombatTrackerConfig
   // Define custom Document classes
   CONFIG.Actor.documentClass = ffrpg4eActor;
   CONFIG.Item.documentClass = ffrpg4eItem;
