@@ -1,5 +1,9 @@
 @import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap");
 /* Global styles */
+@font-face {
+  font-family: "ff14";
+  src: url("fonts/Jupiter Pro Bold.otf") format("opentype");
+}
 .window-app {
   font-family: "Roboto", sans-serif;
 }
@@ -9,7 +13,12 @@
   text-shadow: 0 0 10px red;
   cursor: pointer;
 }
-
+.rollable:hover .item-image {
+  background-image: url("/icons/svg/d10-grey.svg") !important;
+}
+.rollable .item-image:hover {
+  background-image: url("/systems/ffrpg4e/icons/svg/d10-black.svg") !important;
+}
 .grid,
 .grid-2col {
   display: grid;
@@ -227,7 +236,12 @@
 .ffrpg4e .item-form {
   font-family: "Roboto", sans-serif;
 }
-
+.actor .window-content{
+  font-family: "ff14", sans-serif;
+}
+.item .window-content{
+  font-family: "ff14", sans-serif;
+}
 .ffrpg4e .sheet-header {
   -webkit-box-flex: 0;
   -ms-flex: 0 auto;
@@ -367,8 +381,8 @@
   display: -ms-flexbox;
   display: flex;
   -webkit-box-flex: 0;
-  -ms-flex: 0 0 100px;
-  flex: 0 0 100px;
+  -ms-flex: 0 0 200px;
+  flex: 0 0 200px;
   -webkit-box-pack: end;
   -ms-flex-pack: end;
   justify-content: flex-end;

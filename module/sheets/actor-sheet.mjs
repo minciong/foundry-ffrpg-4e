@@ -11,8 +11,8 @@ export class ffrpg4eActorSheet extends ActorSheet {
     return mergeObject(super.defaultOptions, {
       classes: ["ffrpg4e", "sheet", "actor"],
       template: "systems/ffrpg4e/templates/actor/actor-sheet.html",
-      width: 700,
-      height: 600,
+      width: 900,
+      height: 800,
       tabs: [{ navSelector: ".sheet-tabs", contentSelector: ".sheet-body", initial: "features" }]
     });
   }
@@ -163,6 +163,7 @@ export class ffrpg4eActorSheet extends ActorSheet {
 
     // Rollable abilities.
     html.find('.rollable').click(this._onRoll.bind(this));
+    // html.find('.itemroll').click(event => this._onItemRoll(event,html));
 
     // Drag events for macros.
     if (this.actor.owner) {
@@ -217,7 +218,17 @@ export class ffrpg4eActorSheet extends ActorSheet {
       if (dataset.rollType == 'item') {
         const itemId = element.closest('.item').dataset.itemId;
         const item = this.actor.items.get(itemId);
-        if (item) return item.roll();
+        const actor = this.actor;
+        if (item){ 
+          let itemRoll;
+          switch(item.data.type){
+            case "action":console.log(item);itemRoll = this._handleAction(actor, item);this._onSubmit(event);break
+            case "armor":this._equipArmor(actor, item);itemRoll = item.roll();this._onSubmit(event);break
+            case "weapon":console.log("weapon");itemRoll = item.roll();break
+            default: console.log(item);itemRoll =  item.roll();break
+          }
+          return itemRoll
+        }
       }
     }
 
@@ -233,5 +244,35 @@ export class ffrpg4eActorSheet extends ActorSheet {
       return roll;
     }
   }
+_onItemRoll(event,html) {
+    event.preventDefault();
+    const itemId = event.currentTarget.closest(".item").dataset.itemId;
+    const item = this.actor.items.get(itemId);
+    const actor = this.actor
+    console.log(this);
+    switch(item.data.type){
+      case "action":console.log(item);this._handleAction(item);this._onSubmit(event);break
+      case "armor":this._equipArmor(item);item.roll();this._onSubmit(event);break
+      case "weapon":console.log("weapon");item.roll();break
+      default: console.log(item);item.roll();break
+    }
+  }
+  _equipArmor(actor, armor){
+    // let actor = armor.actor;
+    const update = actor.update({"data.arm":armor.data.data.arm, "data.marm":armor.data.data.marm})
+    
 
+  }
+  _handleAction(actor, action){
+    // let actor = action.actor;
+    if((action.data.data.mpCost>0&&actor.data.data.mana.value>=action.data.data.mpCost)){
+        let deltamp= actor.data.data.mana.value-action.data.data.mpCost
+        actor.update({"data.mana.value":deltamp})
+      }
+      if((action.data.data.hpCost>0&&actor.data.data.health.value>=action.data.data.hpCost)){
+        let deltahp= actor.data.data.health.value-action.data.data.hpCost
+        actor.update({"data.health.value":deltahp})
+      }
+        action.roll();
+  }
 }

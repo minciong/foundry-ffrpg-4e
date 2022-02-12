@@ -14,7 +14,7 @@
         and it will add a small amount of padding, a border, and will
         center all of its child elements content and text. --}}
         <div class="resource flex-group-center">
-          <label for="data.health.value" class="resource-label">Health</label>
+          <label for="data.health.value" class="resource-label">{{localize 'FFRPG4E.core.hp'}}</label>
           <div class="resource-content flexrow flex-center flex-between">
           <input type="text" name="data.health.value" value="{{data.health.value}}" data-dtype="Number"/>
           <span> / </span>
@@ -23,7 +23,7 @@
         </div>
 
         <div class="resource flex-group-center">
-          <label for="data.mana.value" class="resource-label">Mana</label>
+          <label for="data.mana.value" class="resource-label">{{localize 'FFRPG4E.core.mp'}}</label>
           <div class="resource-content flexrow flex-center flex-between">
           <input type="text" name="data.mana.value" value="{{data.mana.value}}" data-dtype="Number"/>
           <span> / </span>
@@ -32,7 +32,7 @@
         </div>
 
         <div class="resource flex-group-center">
-          <label for="data.attributes.level.value" class="resource-label">Level</label>
+          <label for="data.attributes.level.value" class="resource-label">{{localize 'FFRPG4E.core.level'}}</label>
           <div class="resource-content flexrow flex-center flex-between">
           <input type="text" name="data.attributes.level.value" value="{{data.attributes.level.value}}" data-dtype="Number"/>
           </div>
@@ -76,7 +76,7 @@
     <a class="item" data-tab="features">Features</a>
     <a class="item" data-tab="skills">Skills</a>
     <a class="item" data-tab="items">Items</a>
-    <a class="item" data-tab="spells">Spells</a>
+    <!-- <a class="item" data-tab="spells">Spells</a> -->
     <a class="item" data-tab="effects">Effects</a>
     <a class="item" data-tab="description">Description</a>
   </nav>
@@ -84,29 +84,29 @@
   {{!-- Sheet Body --}}
   <section class="sheet-body">
     <div class="tab biography" data-group="primary" data-tab="stats">
-          <div class = " grid grid-2col">
-          <div>
-            <input name = "data.expVal" type = "checkbox" {{checked data.expVal}}>
-            <label for="data.expVal">{{localize "FFRPG4E.exp.calculate"}}</label>
-          </div>
-            <div class="resource-content flexrow flex-center flex-between">
-            <span>{{localize "FFRPG4E.exp.budget"}}: </span><span>{{data.attributes.exp.spent}}</span> / <input type="text" name="data.attributes.exp.total" value="{{data.attributes.exp.total}}" data-dtype="Number"/> 
-          </div>
+      <div class = " grid grid-2col">
+        <div>
+          <input name = "data.expVal" type = "checkbox" {{checked data.expVal}}>
+          <label for="data.expVal">{{localize "FFRPG4E.exp.calculate"}}</label>
         </div>
-          <span>Level: {{data.attributes.level.value}}</span>
-          <div class="abilities grid grid-4col">
-            {{#each data.abilities as |ability key|}}
-              <div class="ability flexcol flex-group-center">
-                <label><span class="resource-label ability-mod rollable" data-roll="d100+@abilities.{{key}}.value" data-label="{{key}}">{{localize (concat "FFRPG4E.stats." key)}}: Level {{numberFormat ability.level decimals=0}}</span></label>
-                <label for="data.abilities.{{key}}.exp" class="resource-label">{{localize "FFRPG4E.exp.experience"}}</label>
-                <input type="text" name="data.abilities.{{key}}.exp" value="{{ability.exp}}" data-dtype="Number" min ="0"/>
-                <label for="data.abilities.{{key}}.value" class="resource-label">{{localize "FFRPG4E.exp.points"}}</label>
-                <input type="text" name="data.abilities.{{key}}.value" value="{{ability.value}}" data-dtype="Number" min ="0"/>
-                <h3 class="">{{localize "FFRPG4E.exp.nextPoint"}}: {{numberFormat ability.nextValue decimals=0}}<br> {{localize "FFRPG4E.exp.nextLevel"}}: {{numberFormat ability.nextLevel decimals=0}}</h3>
-              </div>
-            {{/each}}
-          </div>
+        <div class="resource-content flexrow flex-center flex-between">
+          <span>{{localize "FFRPG4E.exp.budget"}}: </span><span>{{data.attributes.exp.spent}}</span> / <input type="text" name="data.attributes.exp.total" value="{{data.attributes.exp.total}}" data-dtype="Number"/> 
         </div>
+      </div>
+      <span>{{localize 'FFRPG4E.core.level'}}: {{data.attributes.level.value}}</span>
+      <div class="abilities grid grid-4col">
+        {{#each data.abilities as |ability key|}}
+        <div class="ability flexcol flex-group-center">
+        <label><span class="resource-label ability-mod rollable" data-roll="d100+@abilities.{{key}}.value" data-label="{{key}}">{{localize (concat "FFRPG4E.stats." key)}}: Level {{numberFormat ability.level decimals=0}}</span></label>
+        <label for="data.abilities.{{key}}.exp" class="resource-label">{{localize "FFRPG4E.exp.experience"}}</label>
+        <input type="text" name="data.abilities.{{key}}.exp" value="{{ability.exp}}" data-dtype="Number" min ="0"/>
+        <label for="data.abilities.{{key}}.value" class="resource-label">{{localize "FFRPG4E.exp.points"}}</label>
+        <input type="text" name="data.abilities.{{key}}.value" value="{{ability.value}}" data-dtype="Number" min ="0"/>
+        <h3 class="">{{localize "FFRPG4E.exp.nextPoint"}}: {{numberFormat ability.nextValue decimals=0}}<br> {{localize "FFRPG4E.exp.nextLevel"}}: {{numberFormat ability.nextLevel decimals=0}}</h3>
+        </div>
+        {{/each}}
+      </div>
+    </div>
 
     {{!-- Owned Features Tab --}}
     <div class="tab features" data-group="primary" data-tab="features">
@@ -142,9 +142,9 @@
     </div>
 
     {{!-- Owned Spells Tab --}}
-    <div class="tab spells" data-group="primary" data-tab="spells">
+    <!-- <div class="tab spells" data-group="primary" data-tab="spells">
       {{> "systems/ffrpg4e/templates/actor/parts/actor-spells.html"}}
-    </div>
+    </div> -->
 
     {{!-- Active Effects Tab --}}
     <div class="tab effects flexcol" data-group="primary" data-tab="effects">

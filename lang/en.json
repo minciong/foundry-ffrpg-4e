@@ -33,7 +33,7 @@
       "action":{
           "damageBase": "Damage Base",
           "element" : "Element",
-          "damageType" : "Physical/Magical",
+          "damageType" : "Physical / Magical",
           "userStat": "User Stat",
           "targetStat": "Target Stat",
           "actionModifier": "Action Modifier",
@@ -126,6 +126,7 @@
         "arm":"ARM",
         "marm":"MARM",
         "initiative":"Initiative",
+        "level":"Level",
         "gil":"Gil"
       },
       "chat":{
