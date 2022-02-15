@@ -495,7 +495,7 @@ export class FFCombatTracker extends SidebarTab {
    */
   _onConfigureCombatant(li) {
     const combatant = this.viewed.combatants.get(li.data('combatant-id'));
-    console.log(combatant)
+    // console.log(combatant)
     new FFCombatantConfig(combatant, {
       top: Math.min(li[0].offsetTop, window.innerHeight - 350),
       left: window.innerWidth - 720,

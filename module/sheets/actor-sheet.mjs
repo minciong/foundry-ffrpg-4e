@@ -163,7 +163,7 @@ export class ffrpg4eActorSheet extends ActorSheet {
 
     // Rollable abilities.
     html.find('.rollable').click(this._onRoll.bind(this));
-    // html.find('.itemroll').click(event => this._onItemRoll(event,html));
+    
 
     // Drag events for macros.
     if (this.actor.owner) {
@@ -222,10 +222,10 @@ export class ffrpg4eActorSheet extends ActorSheet {
         if (item){ 
           let itemRoll;
           switch(item.data.type){
-            case "action":console.log(item);itemRoll = this._handleAction(actor, item);this._onSubmit(event);break
+            case "action":itemRoll = this._handleAction(actor, item);this._onSubmit(event);break
             case "armor":this._equipArmor(actor, item);itemRoll = item.roll();this._onSubmit(event);break
-            case "weapon":console.log("weapon");itemRoll = item.roll();break
-            default: console.log(item);itemRoll =  item.roll();break
+            case "weapon":itemRoll = item.roll();break
+            default: itemRoll =  item.roll();break
           }
           return itemRoll
         }
@@ -244,19 +244,7 @@ export class ffrpg4eActorSheet extends ActorSheet {
       return roll;
     }
   }
-_onItemRoll(event,html) {
-    event.preventDefault();
-    const itemId = event.currentTarget.closest(".item").dataset.itemId;
-    const item = this.actor.items.get(itemId);
-    const actor = this.actor
-    console.log(this);
-    switch(item.data.type){
-      case "action":console.log(item);this._handleAction(item);this._onSubmit(event);break
-      case "armor":this._equipArmor(item);item.roll();this._onSubmit(event);break
-      case "weapon":console.log("weapon");item.roll();break
-      default: console.log(item);item.roll();break
-    }
-  }
+
   _equipArmor(actor, armor){
     // let actor = armor.actor;
     const update = actor.update({"data.arm":armor.data.data.arm, "data.marm":armor.data.data.marm})
