@@ -23,6 +23,6 @@
   "secondaryTokenAttribute": "power",
   "url": "https://github.com/minciong/foundry-ffrpg-4e",
   "manifest": "https://raw.githubusercontent.com/minciong/foundry-ffrpg-4e/main/system.json",
-  "download": "",
+  "download": "https://github.com/minciong/foundry-ffrpg-4e/archive/v1.1.zip",
   "license": "LICENSE.txt"
 }
